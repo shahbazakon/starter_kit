@@ -1,0 +1,116 @@
+import 'package:flutter/material.dart';
+{{#use_bloc}}
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '{{screen_name_snake}}_bloc.dart';
+{{/use_bloc}}
+{{#use_riverpod}}
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '{{screen_name_snake}}_provider.dart';
+{{/use_riverpod}}
+
+/// {{screen_name_pascal}} Screen
+class {{screen_name_pascal}}Screen extends StatelessWidget {
+  /// Route name for navigation
+  static const String routeName = '/{{screen_name_kebab}}';
+
+  /// Constructor
+  const {{screen_name_pascal}}Screen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    {{#use_bloc}}
+    return BlocProvider(
+      create: (context) => {{screen_name_pascal}}Bloc(),
+      child: const _{{screen_name_pascal}}View(),
+    );
+    {{/use_bloc}}
+    {{#use_riverpod}}
+    return const _{{screen_name_pascal}}View();
+    {{/use_riverpod}}
+    {{^use_bloc}}{{^use_riverpod}}
+    return const _{{screen_name_pascal}}View();
+    {{/use_riverpod}}{{/use_bloc}}
+  }
+}
+
+class _{{screen_name_pascal}}View extends StatelessWidget {
+  const _{{screen_name_pascal}}View({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('{{screen_name_title}}'),
+      ),
+      body: {{#use_bloc}}
+      BlocBuilder<{{screen_name_pascal}}Bloc, {{screen_name_pascal}}State>(
+        builder: (context, state) {
+          if (state is {{screen_name_pascal}}Loading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is {{screen_name_pascal}}Error) {
+            return Center(child: Text('Error: ${state.message}'));
+          } else if (state is {{screen_name_pascal}}Loaded) {
+            return _buildContent(context, state);
+          }
+          return const Center(child: Text('No data available'));
+        },
+      ),
+      {{/use_bloc}}
+      {{#use_riverpod}}
+      Consumer(
+        builder: (context, ref, child) {
+          final state = ref.watch({{screen_name_camel}}Provider);
+          return state.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stackTrace) => Center(child: Text('Error: $error')),
+            data: (data) => _buildContent(context, data),
+          );
+        },
+      ),
+      {{/use_riverpod}}
+      {{^use_bloc}}{{^use_riverpod}}
+      _buildContent(context),
+      {{/use_riverpod}}{{/use_bloc}}
+    );
+  }
+
+  {{#use_bloc}}
+  Widget _buildContent(BuildContext context, {{screen_name_pascal}}Loaded state) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('{{screen_name_pascal}} Screen'),
+          // Add your content here
+        ],
+      ),
+    );
+  }
+  {{/use_bloc}}
+  {{#use_riverpod}}
+  Widget _buildContent(BuildContext context, dynamic data) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('{{screen_name_pascal}} Screen'),
+          // Add your content here
+        ],
+      ),
+    );
+  }
+  {{/use_riverpod}}
+  {{^use_bloc}}{{^use_riverpod}}
+  Widget _buildContent(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('{{screen_name_pascal}} Screen'),
+          // Add your content here
+        ],
+      ),
+    );
+  }
+  {{/use_riverpod}}{{/use_bloc}}
+} 

@@ -1,0 +1,106 @@
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
+
+/// {{screen_name_pascal}} Events
+abstract class {{screen_name_pascal}}Event extends Equatable {
+  const {{screen_name_pascal}}Event();
+
+  @override
+  List<Object?> get props => [];
+}
+
+/// Initialize {{screen_name_pascal}}
+class Initialize{{screen_name_pascal}} extends {{screen_name_pascal}}Event {
+  const Initialize{{screen_name_pascal}}();
+}
+
+/// Refresh {{screen_name_pascal}}
+class Refresh{{screen_name_pascal}} extends {{screen_name_pascal}}Event {
+  const Refresh{{screen_name_pascal}}();
+}
+
+/// {{screen_name_pascal}} States
+abstract class {{screen_name_pascal}}State extends Equatable {
+  const {{screen_name_pascal}}State();
+
+  @override
+  List<Object?> get props => [];
+}
+
+/// {{screen_name_pascal}} Initial State
+class {{screen_name_pascal}}Initial extends {{screen_name_pascal}}State {
+  const {{screen_name_pascal}}Initial();
+}
+
+/// {{screen_name_pascal}} Loading State
+class {{screen_name_pascal}}Loading extends {{screen_name_pascal}}State {
+  const {{screen_name_pascal}}Loading();
+}
+
+/// {{screen_name_pascal}} Loaded State
+class {{screen_name_pascal}}Loaded extends {{screen_name_pascal}}State {
+  final dynamic data; // Replace with your data model
+
+  const {{screen_name_pascal}}Loaded(this.data);
+
+  @override
+  List<Object?> get props => [data];
+}
+
+/// {{screen_name_pascal}} Error State
+class {{screen_name_pascal}}Error extends {{screen_name_pascal}}State {
+  final String message;
+
+  const {{screen_name_pascal}}Error(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+/// {{screen_name_pascal}} Bloc
+class {{screen_name_pascal}}Bloc extends Bloc<{{screen_name_pascal}}Event, {{screen_name_pascal}}State> {
+  {{screen_name_pascal}}Bloc() : super(const {{screen_name_pascal}}Initial()) {
+    on<Initialize{{screen_name_pascal}}>(_onInitialize);
+    on<Refresh{{screen_name_pascal}}>(_onRefresh);
+  }
+
+  Future<void> _onInitialize(
+    Initialize{{screen_name_pascal}} event,
+    Emitter<{{screen_name_pascal}}State> emit,
+  ) async {
+    emit(const {{screen_name_pascal}}Loading());
+    try {
+      // TODO: Implement data loading logic
+      // For example:
+      // final repository = getIt<{{screen_name_pascal}}Repository>();
+      // final data = await repository.getData();
+      
+      // Placeholder data
+      final data = 'Sample data';
+      
+      emit({{screen_name_pascal}}Loaded(data));
+    } catch (e) {
+      emit({{screen_name_pascal}}Error(e.toString()));
+    }
+  }
+
+  Future<void> _onRefresh(
+    Refresh{{screen_name_pascal}} event,
+    Emitter<{{screen_name_pascal}}State> emit,
+  ) async {
+    emit(const {{screen_name_pascal}}Loading());
+    try {
+      // TODO: Implement refresh logic
+      // For example:
+      // final repository = getIt<{{screen_name_pascal}}Repository>();
+      // final data = await repository.refreshData();
+      
+      // Placeholder data
+      final data = 'Refreshed data';
+      
+      emit({{screen_name_pascal}}Loaded(data));
+    } catch (e) {
+      emit({{screen_name_pascal}}Error(e.toString()));
+    }
+  }
+} 

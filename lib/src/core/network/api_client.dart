@@ -173,7 +173,7 @@ class ApiClient {
 
         if (success) {
           return ApiResponse<T>.success(
-            data: data['data'],
+            data: data['data'] as T?,
             message: data['message'] as String?,
           );
         } else {
@@ -189,7 +189,8 @@ class ApiClient {
       }
 
       // If the response doesn't contain a success field, assume it's successful
-      return ApiResponse<T>.success(data: data);
+      // and pass the entire data object as the response data
+      return ApiResponse<T>.success(data: data as T?);
     } catch (e) {
       _logger.e('Error parsing response: $e');
       return ApiResponse.error(message: 'Failed to parse response');

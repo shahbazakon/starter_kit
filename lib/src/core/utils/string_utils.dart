@@ -5,7 +5,7 @@ class StringUtils {
   /// Capitalize the first letter of a string
   static String capitalize(String text) {
     if (text.isEmpty) return text;
-    return text[0].toUpperCase() + text.substring(1);
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
   }
 
   /// Capitalize the first letter of each word in a string
@@ -72,7 +72,7 @@ class StringUtils {
   }) {
     if (text.length <= maxLength) return text;
 
-    return text.substring(0, maxLength - ellipsis.length) + ellipsis;
+    return text.substring(0, maxLength) + ellipsis;
   }
 
   /// Remove all whitespace from a string

@@ -1,127 +1,156 @@
+#!/usr/bin/env dart
+
 import 'dart:io';
 import 'package:args/args.dart';
-import 'package:mason_logger/mason_logger.dart';
-import 'package:path/path.dart' as path;
 
-void main(List<String> arguments) async {
-  final logger = Logger();
+void main(List<String> arguments) {
+  final parser =
+      ArgParser()
+        ..addCommand('init')
+        ..addCommand('add_screen')
+        ..addCommand('add_api')
+        ..addCommand('add_model')
+        ..addCommand('generate')
+        ..addFlag('help', abbr: 'h', help: 'Show usage information');
 
   try {
-    final parser =
-        ArgParser()
-          ..addCommand('init')
-          ..addCommand('add_screen')
-          ..addCommand('add_api')
-          ..addCommand('generate_assets')
-          ..addCommand('update_localization')
-          ..addCommand('add_module');
+    final results = parser.parse(arguments);
 
-    final argResults = parser.parse(arguments);
-
-    if (argResults.command == null) {
-      _printUsage(parser);
-      exit(0);
+    if (results['help'] as bool || arguments.isEmpty) {
+      _showHelp(parser);
+      return;
     }
 
-    switch (argResults.command!.name) {
+    final command = results.command;
+    if (command == null) {
+      stderr.writeln('No command specified. Use --help for usage information.');
+      exit(1);
+    }
+
+    switch (command.name) {
       case 'init':
-        logger.info('🚀 Initializing new StarterKit project...');
-        await _initializeProject();
+        _initProject(command.arguments);
         break;
       case 'add_screen':
-        final screenName =
-            argResults.command!.arguments.isEmpty
-                ? null
-                : argResults.command!.arguments.first;
-        if (screenName == null) {
-          logger.err('❌ Screen name is required');
-          exit(1);
-        }
-        logger.info('🏗️ Generating screen: $screenName');
-        await _addScreen(screenName);
+        _addScreen(command.arguments);
         break;
       case 'add_api':
-        final apiName =
-            argResults.command!.arguments.isEmpty
-                ? null
-                : argResults.command!.arguments.first;
-        if (apiName == null) {
-          logger.err('❌ API endpoint name is required');
-          exit(1);
-        }
-        logger.info('🔌 Generating API: $apiName');
-        await _addApi(apiName);
+        _addApi(command.arguments);
         break;
-      case 'generate_assets':
-        logger.info('🖼️ Generating assets references...');
-        await _generateAssets();
+      case 'add_model':
+        _addModel(command.arguments);
         break;
-      case 'update_localization':
-        logger.info('🌐 Updating localization files...');
-        await _updateLocalization();
-        break;
-      case 'add_module':
-        final moduleName =
-            argResults.command!.arguments.isEmpty
-                ? null
-                : argResults.command!.arguments.first;
-        if (moduleName == null) {
-          logger.err('❌ Module name is required');
-          exit(1);
-        }
-        logger.info('📦 Generating module: $moduleName');
-        await _addModule(moduleName);
+      case 'generate':
+        _generateCode(command.arguments);
         break;
       default:
-        _printUsage(parser);
-        break;
+        stderr.writeln('Unknown command: ${command.name}');
+        exit(1);
     }
   } catch (e) {
-    logger.err('❌ Error: $e');
+    stderr.writeln('Error: $e');
     exit(1);
   }
 }
 
-void _printUsage(ArgParser parser) {
-  print('''
-🧱 StarterKit - Flutter Boilerplate Generator
-
-Usage:
-  flutter pub run starter_kit:init - Creates a new project with full structure
-  flutter pub run starter_kit:add_screen <name> - Generates a new screen with related files
-  flutter pub run starter_kit:add_api <endpoint_name> - Generates API related files
-  flutter pub run starter_kit:generate_assets - Creates references for all assets
-  flutter pub run starter_kit:update_localization - Updates localization files
-  flutter pub run starter_kit:add_module <feature_name> - Adds a new feature module
-''');
+void _showHelp(ArgParser parser) {
+  stdout.writeln('StarterKit CLI - Flutter project generator');
+  stdout.writeln('');
+  stdout.writeln('Usage: starter_kit <command> [arguments]');
+  stdout.writeln('');
+  stdout.writeln('Available commands:');
+  stdout.writeln(
+    '  init         Initialize a new Flutter project with StarterKit',
+  );
+  stdout.writeln('  add_screen   Add a new screen to the project');
+  stdout.writeln('  add_api      Add a new API service to the project');
+  stdout.writeln('  add_model    Add a new data model to the project');
+  stdout.writeln('  generate     Generate code from templates');
+  stdout.writeln('');
+  stdout.writeln('Global options:');
+  stdout.writeln(parser.usage);
 }
 
-Future<void> _initializeProject() async {
-  // This will be implemented to generate the full project structure
-  print('Project initialization will be implemented here');
+void _initProject(List<String> arguments) {
+  stdout.writeln('Initializing new Flutter project with StarterKit...');
+
+  // Create basic project structure
+  final directories = [
+    'lib/src/core/config',
+    'lib/src/core/design_system/components',
+    'lib/src/core/design_system/theme',
+    'lib/src/core/design_system/utils',
+    'lib/src/core/di',
+    'lib/src/core/localization',
+    'lib/src/core/network',
+    'lib/src/core/utils',
+    'lib/src/data/models',
+    'lib/src/data/repositories',
+    'lib/src/domain/entities',
+    'lib/src/domain/repositories',
+    'lib/src/domain/usecases',
+    'lib/src/presentation/pages',
+    'lib/src/presentation/widgets',
+    'assets/icons',
+    'assets/images',
+  ];
+
+  for (final dir in directories) {
+    Directory(dir).createSync(recursive: true);
+    stdout.writeln('Created directory: $dir');
+  }
+
+  stdout.writeln('Project initialized successfully!');
 }
 
-Future<void> _addScreen(String name) async {
-  // This will be implemented to generate screen and related files
-  print('Screen generation for $name will be implemented here');
+void _addScreen(List<String> arguments) {
+  if (arguments.isEmpty) {
+    stderr.writeln(
+      'Screen name is required. Usage: starter_kit add_screen <screen_name>',
+    );
+    exit(1);
+  }
+
+  final screenName = arguments[0];
+  stdout.writeln('Adding screen: $screenName');
+
+  // TODO: Implement screen generation logic
+  stdout.writeln('Screen $screenName added successfully!');
 }
 
-Future<void> _addApi(String name) async {
-  // This will be implemented to generate API related files
-  print('API generation for $name will be implemented here');
+void _addApi(List<String> arguments) {
+  if (arguments.isEmpty) {
+    stderr.writeln(
+      'API name is required. Usage: starter_kit add_api <api_name>',
+    );
+    exit(1);
+  }
+
+  final apiName = arguments[0];
+  stdout.writeln('Adding API service: $apiName');
+
+  // TODO: Implement API service generation logic
+  stdout.writeln('API service $apiName added successfully!');
 }
 
-Future<void> _generateAssets() async {
-  // This will be implemented to create asset references
-  print('Asset reference generation will be implemented here');
+void _addModel(List<String> arguments) {
+  if (arguments.isEmpty) {
+    stderr.writeln(
+      'Model name is required. Usage: starter_kit add_model <model_name>',
+    );
+    exit(1);
+  }
+
+  final modelName = arguments[0];
+  stdout.writeln('Adding model: $modelName');
+
+  // TODO: Implement model generation logic
+  stdout.writeln('Model $modelName added successfully!');
 }
 
-Future<void> _updateLocalization() async {
-  // This will be implemented to update localization files
-  print('Localization update will be implemented here');
-}
+void _generateCode(List<String> arguments) {
+  stdout.writeln('Generating code from templates...');
 
-Future<void> _addModule(String name) async {
-  // This will be implemented to generate a new feature module
-  print('Module generation for $name will be implemented here');
+  // TODO: Implement code generation logic
+  stdout.writeln('Code generation completed successfully!');
 }

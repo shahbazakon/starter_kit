@@ -25,22 +25,22 @@ class PrimaryButton extends StatelessWidget {
 
   /// Creates a primary button
   const PrimaryButton({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.icon,
     this.isLoading = false,
     this.fullWidth = false,
     this.size = ButtonSize.medium,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return _buildButton(
       backgroundColor: AppColors.primary,
-      disabledBackgroundColor: AppColors.primary.withOpacity(0.5),
+      disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
       textColor: AppColors.white,
-      disabledTextColor: AppColors.white.withOpacity(0.7),
+      disabledTextColor: AppColors.white.withValues(alpha: 0.7),
     );
   }
 
@@ -124,22 +124,14 @@ class PrimaryButton extends StatelessWidget {
 class SecondaryButton extends PrimaryButton {
   /// Creates a secondary button
   const SecondaryButton({
-    Key? key,
-    required String text,
-    VoidCallback? onPressed,
-    IconData? icon,
-    bool isLoading = false,
-    bool fullWidth = false,
-    ButtonSize size = ButtonSize.medium,
-  }) : super(
-         key: key,
-         text: text,
-         onPressed: onPressed,
-         icon: icon,
-         isLoading: isLoading,
-         fullWidth: fullWidth,
-         size: size,
-       );
+    super.key,
+    required super.text,
+    super.onPressed,
+    super.icon,
+    super.isLoading = false,
+    super.fullWidth = false,
+    super.size = ButtonSize.medium,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -156,22 +148,14 @@ class SecondaryButton extends PrimaryButton {
 class OutlineButton extends PrimaryButton {
   /// Creates an outline button
   const OutlineButton({
-    Key? key,
-    required String text,
-    VoidCallback? onPressed,
-    IconData? icon,
-    bool isLoading = false,
-    bool fullWidth = false,
-    ButtonSize size = ButtonSize.medium,
-  }) : super(
-         key: key,
-         text: text,
-         onPressed: onPressed,
-         icon: icon,
-         isLoading: isLoading,
-         fullWidth: fullWidth,
-         size: size,
-       );
+    super.key,
+    required super.text,
+    super.onPressed,
+    super.icon,
+    super.isLoading = false,
+    super.fullWidth = false,
+    super.size = ButtonSize.medium,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -252,12 +236,12 @@ class TextBtn extends StatelessWidget {
 
   /// Creates a text button
   const TextBtn({
-    Key? key,
+    super.key,
     required this.text,
     this.onPressed,
     this.icon,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -310,12 +294,12 @@ class IconBtn extends StatelessWidget {
 
   /// Creates an icon button
   const IconBtn({
-    Key? key,
+    super.key,
     required this.icon,
     this.onPressed,
     this.color,
     this.size = 24.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

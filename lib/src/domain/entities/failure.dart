@@ -13,30 +13,25 @@ abstract class Failure extends Equatable {
 
 /// Network related failures
 class NetworkFailure extends Failure {
-  const NetworkFailure({required String message, int? code})
-    : super(message: message, code: code);
+  const NetworkFailure({required super.message, super.code});
 }
 
 /// Server related failures (e.g. 500 errors)
 class ServerFailure extends Failure {
-  const ServerFailure({required String message, int? code})
-    : super(message: message, code: code);
+  const ServerFailure({required super.message, super.code});
 }
 
 /// Authentication related failures (e.g. 401 errors)
 class AuthFailure extends Failure {
-  const AuthFailure({required String message, int? code})
-    : super(message: message, code: code);
+  const AuthFailure({required super.message, super.code});
 }
 
 /// Failures related to local cache operations
 class CacheFailure extends Failure {
-  const CacheFailure({required String message, int? code})
-    : super(message: message, code: code);
+  const CacheFailure({required super.message, super.code});
 }
 
 /// Generic failures for unexpected errors
 class UnexpectedFailure extends Failure {
-  const UnexpectedFailure({required String message, int? code})
-    : super(message: message, code: code);
+  const UnexpectedFailure({required super.message, super.code});
 }

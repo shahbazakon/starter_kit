@@ -1,10 +1,5 @@
-import 'package:json_annotation/json_annotation.dart';
-
-part 'api_response.g.dart';
-
 /// Generic API response model that can be used to parse any API response
 /// [T] is the type of data expected in the response
-@JsonSerializable(genericArgumentFactories: true)
 class ApiResponse<T> {
   /// Status of the response (success or error)
   final bool success;
@@ -22,7 +17,7 @@ class ApiResponse<T> {
   final List<String>? errors;
 
   /// Constructor for ApiResponse
-  ApiResponse({
+  const ApiResponse({
     required this.success,
     this.message,
     this.code,
@@ -32,13 +27,34 @@ class ApiResponse<T> {
 
   /// Factory constructor for creating a new ApiResponse from JSON
   factory ApiResponse.fromJson(
-    Map<String, dynamic> json,
-    T Function(Object? json) fromJsonT,
-  ) => _$ApiResponseFromJson(json, fromJsonT);
+    Map<String, dynamic> json, {
+    T Function(Object?)? fromJsonT,
+  }) {
+    return ApiResponse<T>(
+      success: json['success'] as bool? ?? true,
+      message: json['message'] as String?,
+      code: json['code'] as int?,
+      data:
+          fromJsonT != null && json['data'] != null
+              ? fromJsonT(json['data'])
+              : json['data'] as T?,
+      errors:
+          json['errors'] != null
+              ? (json['errors'] as List).map((e) => e.toString()).toList()
+              : null,
+    );
+  }
 
   /// Convert this ApiResponse to JSON
-  Map<String, dynamic> toJson(Object Function(T value) toJsonT) =>
-      _$ApiResponseToJson(this, toJsonT);
+  Map<String, dynamic> toJson({Object? Function(T?)? toJsonT}) {
+    return {
+      'success': success,
+      if (message != null) 'message': message,
+      if (code != null) 'code': code,
+      if (data != null) 'data': toJsonT != null ? toJsonT(data) : data,
+      if (errors != null) 'errors': errors,
+    };
+  }
 
   /// Create a success response
   factory ApiResponse.success({T? data, String? message}) {
@@ -57,5 +73,56 @@ class ApiResponse<T> {
       code: code,
       errors: errors,
     );
+  }
+
+  /// Check if the response is successful
+  bool get isSuccess => success;
+
+  /// Check if the response has errors
+  bool get hasError => !success;
+
+  /// Get the first error message if available
+  String? get errorMessage => message ?? errors?.first;
+
+  /// Create a copy of this response with updated values
+  ApiResponse<T> copyWith({
+    bool? success,
+    String? message,
+    int? code,
+    T? data,
+    List<String>? errors,
+  }) {
+    return ApiResponse<T>(
+      success: success ?? this.success,
+      message: message ?? this.message,
+      code: code ?? this.code,
+      data: data ?? this.data,
+      errors: errors ?? this.errors,
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ApiResponse{success: $success, message: $message, code: $code, data: $data, errors: $errors}';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    if (other is! ApiResponse<T>) return false;
+    return success == other.success &&
+        message == other.message &&
+        code == other.code &&
+        data == other.data &&
+        errors.toString() == other.errors.toString();
+  }
+
+  @override
+  int get hashCode {
+    return success.hashCode ^
+        message.hashCode ^
+        code.hashCode ^
+        data.hashCode ^
+        errors.hashCode;
   }
 }

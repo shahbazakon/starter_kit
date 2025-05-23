@@ -1,7 +1,6 @@
-/// Design System for the application.
-///
-/// This file exports all design system components and utilities.
-library design_system;
+// Design System for the application.
+//
+// This file exports all design system components and utilities.
 
 export 'theme/app_colors.dart';
 export 'theme/app_text_styles.dart';

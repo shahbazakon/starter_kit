@@ -165,8 +165,8 @@ class NavigationUtils {
   /// Show a loading dialog
   static void showLoadingDialog({String? message}) {
     showAppDialog(
-      dialog: WillPopScope(
-        onWillPop: () async => false,
+      dialog: PopScope(
+        canPop: false,
         child: Dialog(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

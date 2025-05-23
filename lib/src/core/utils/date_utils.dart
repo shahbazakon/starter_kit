@@ -103,6 +103,24 @@ class AppDateUtils {
     return year % 4 == 0 && (year % 100 != 0 || year % 400 == 0);
   }
 
+  /// Check if a date is today
+  static bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return startOfDay(date).isAtSameMomentAs(startOfDay(now));
+  }
+
+  /// Check if a date is yesterday
+  static bool isYesterday(DateTime date) {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    return startOfDay(date).isAtSameMomentAs(startOfDay(yesterday));
+  }
+
+  /// Check if a date is tomorrow
+  static bool isTomorrow(DateTime date) {
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    return startOfDay(date).isAtSameMomentAs(startOfDay(tomorrow));
+  }
+
   /// Get a list of dates between two dates
   static List<DateTime> datesBetween(DateTime start, DateTime end) {
     final days = end.difference(start).inDays;

@@ -131,13 +131,12 @@ class DeviceUtils {
       return 'web';
     } else if (Platform.isAndroid) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
-      // Simple heuristic for Android: diagonal screen size > 7 inches is a tablet
-      final diagonalInches = _calculateDiagonalInches(
-        androidInfo.displayMetrics.widthPx / androidInfo.displayMetrics.density,
-        androidInfo.displayMetrics.heightPx /
-            androidInfo.displayMetrics.density,
-      );
-      return diagonalInches > 7 ? 'tablet' : 'mobile';
+      // Simple heuristic for Android: check device model for tablet indicators
+      final model = androidInfo.model.toLowerCase();
+      if (model.contains('tablet') || model.contains('pad')) {
+        return 'tablet';
+      }
+      return 'mobile';
     } else if (Platform.isIOS) {
       final iosInfo = await _deviceInfoPlugin.iosInfo;
       // For iOS, check the model identifier
@@ -147,26 +146,37 @@ class DeviceUtils {
     }
   }
 
-  /// Calculate the diagonal screen size in inches
-  static double _calculateDiagonalInches(double widthDp, double heightDp) {
-    final diagonalDp = sqrt(widthDp * widthDp + heightDp * heightDp);
-    return diagonalDp / 160; // 160 is the default density
-  }
-
-  /// Get the device memory in GB
-  static Future<double> getDeviceMemory() async {
+  /// Get basic device memory information (simplified)
+  static Future<String> getDeviceMemoryInfo() async {
     if (Platform.isAndroid) {
       final androidInfo = await _deviceInfoPlugin.androidInfo;
-      // Convert from bytes to GB
-      return androidInfo.totalMemory / (1024 * 1024 * 1024);
+      // Return basic device info instead of memory which is not available
+      return 'Android device (${androidInfo.model})';
+    } else if (Platform.isIOS) {
+      final iosInfo = await _deviceInfoPlugin.iosInfo;
+      return 'iOS device (${iosInfo.model})';
     } else {
-      // Not available for other platforms
-      return 0;
+      return 'Unknown device';
     }
   }
-}
 
-/// Calculate the square root of a number
-double sqrt(double value) {
-  return value * 0.5 + value / (2 * value * 0.5);
+  /// Get device orientation (requires BuildContext, so this is a utility helper)
+  static String getDeviceOrientation(double width, double height) {
+    return width > height ? 'landscape' : 'portrait';
+  }
+
+  /// Check if device supports biometrics (placeholder - requires additional packages)
+  static Future<bool> supportsBiometrics() async {
+    // This would require additional packages like local_auth
+    // For now, return false as a safe default
+    return false;
+  }
+
+  /// Get platform-specific file paths helper
+  static String getPlatformPath(String filename) {
+    if (Platform.isWindows) {
+      return filename.replaceAll('/', '\\');
+    }
+    return filename;
+  }
 }

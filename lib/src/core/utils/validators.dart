@@ -16,6 +16,20 @@ class Validators {
     return null;
   }
 
+  /// Validates if a string is a valid email (alias for validateEmail)
+  static String? email(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+
+    final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
+    if (!emailRegExp.hasMatch(value)) {
+      return 'Please enter a valid email address';
+    }
+
+    return null;
+  }
+
   /// Validates if a string is not empty
   static String? validateRequired(String? value, {String? fieldName}) {
     if (value == null || value.isEmpty) {
@@ -53,6 +67,20 @@ class Validators {
 
   /// Validates if a string is a valid phone number
   static String? validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number is required';
+    }
+
+    final phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
+    if (!phoneRegExp.hasMatch(value)) {
+      return 'Please enter a valid phone number';
+    }
+
+    return null;
+  }
+
+  /// Validates if a string is a valid phone number (alias for validatePhone)
+  static String? phone(String? value) {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }

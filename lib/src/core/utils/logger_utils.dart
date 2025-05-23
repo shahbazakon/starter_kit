@@ -10,13 +10,13 @@ class AppLogger {
       lineLength: 120,
       colors: true,
       printEmojis: true,
-      printTime: true,
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
     ),
   );
 
   /// Logger instance for production
   static final Logger _prodLogger = Logger(
-    printer: SimplePrinter(printTime: true),
+    printer: SimplePrinter(colors: false),
     level: Level.warning,
   );
 
@@ -51,9 +51,15 @@ class AppLogger {
     logger.e(message, error: error, stackTrace: stackTrace);
   }
 
-  /// Log a verbose message
+  /// Log a trace message (replacement for deprecated verbose)
+  static void t(dynamic message, [dynamic error, StackTrace? stackTrace]) {
+    logger.t(message, error: error, stackTrace: stackTrace);
+  }
+
+  /// Log a verbose message (deprecated, use t() instead)
+  @Deprecated('Use t() instead for trace logging')
   static void v(dynamic message, [dynamic error, StackTrace? stackTrace]) {
-    logger.v(message, error: error, stackTrace: stackTrace);
+    logger.t(message, error: error, stackTrace: stackTrace);
   }
 
   /// Log a wtf message

@@ -34,7 +34,7 @@ class AppCard extends StatelessWidget {
 
   /// Creates a card
   const AppCard({
-    Key? key,
+    super.key,
     required this.child,
     this.padding,
     this.margin,
@@ -44,7 +44,7 @@ class AppCard extends StatelessWidget {
     this.elevation = 1.0,
     this.isClickable = false,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +117,7 @@ class AppListCard extends StatelessWidget {
 
   /// Creates a list card
   const AppListCard({
-    Key? key,
+    super.key,
     required this.title,
     this.subtitle,
     this.leading,
@@ -129,7 +129,7 @@ class AppListCard extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.elevation = 1.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -198,7 +198,7 @@ class AppInfoCard extends StatelessWidget {
 
   /// Creates an info card
   const AppInfoCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.content,
     this.footer,
@@ -210,7 +210,7 @@ class AppInfoCard extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.elevation = 1.0,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -297,7 +297,7 @@ class AppStatusCard extends StatelessWidget {
 
   /// Creates a status card
   const AppStatusCard({
-    Key? key,
+    super.key,
     required this.title,
     required this.status,
     required this.statusColor,
@@ -310,7 +310,7 @@ class AppStatusCard extends StatelessWidget {
     this.backgroundColor,
     this.borderColor,
     this.elevation = 1.0,
-  }) : super(key: key);
+  });
 
   /// Creates a success status card
   factory AppStatusCard.success({

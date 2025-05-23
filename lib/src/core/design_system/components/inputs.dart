@@ -71,7 +71,7 @@ class AppTextField extends StatelessWidget {
 
   /// Creates a text field
   const AppTextField({
-    Key? key,
+    super.key,
     this.controller,
     this.hintText,
     this.labelText,
@@ -93,7 +93,7 @@ class AppTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.onSuffixIconTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -192,13 +192,15 @@ class AppTextField extends StatelessWidget {
             ),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: AppColors.border.withOpacity(0.5)),
+              borderSide: BorderSide(
+                color: AppColors.border.withValues(alpha: 0.5),
+              ),
             ),
             filled: true,
             fillColor:
                 enabled
                     ? AppColors.white
-                    : AppColors.lightGrey.withOpacity(0.5),
+                    : AppColors.lightGrey.withValues(alpha: 0.5),
             counterText: '',
           ),
         ),
@@ -229,14 +231,14 @@ class AppSearchField extends StatelessWidget {
 
   /// Creates a search field
   const AppSearchField({
-    Key? key,
+    super.key,
     this.controller,
     this.hintText = 'Search',
     this.onChanged,
     this.onSubmitted,
     this.onClear,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -284,7 +286,7 @@ class AppSearchField extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         filled: true,
-        fillColor: AppColors.lightGrey.withOpacity(0.5),
+        fillColor: AppColors.lightGrey.withValues(alpha: 0.5),
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       ),
     );
@@ -322,7 +324,7 @@ class AppDropdownField<T> extends StatelessWidget {
 
   /// Creates a dropdown field
   const AppDropdownField({
-    Key? key,
+    super.key,
     this.value,
     required this.items,
     this.hintText,
@@ -332,7 +334,7 @@ class AppDropdownField<T> extends StatelessWidget {
     this.isRequired = false,
     this.enabled = true,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +376,7 @@ class AppDropdownField<T> extends StatelessWidget {
             color:
                 enabled
                     ? AppColors.white
-                    : AppColors.lightGrey.withOpacity(0.5),
+                    : AppColors.lightGrey.withValues(alpha: 0.5),
           ),
           child: DropdownButtonHideUnderline(
             child: ButtonTheme(

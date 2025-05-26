@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import '../theme/colors.dart';
 import '../theme/typography.dart';
 
 /// Primary action button
-class PrimaryButton extends StatelessWidget {
+class AppButton extends StatelessWidget {
   final String text;
   final VoidCallback? onPressed;
   final IconData? icon;
@@ -11,7 +12,7 @@ class PrimaryButton extends StatelessWidget {
   final bool fullWidth;
   final EdgeInsetsGeometry? padding;
 
-  const PrimaryButton({
+  const AppButton({
     super.key,
     required this.text,
     this.onPressed,
@@ -31,25 +32,23 @@ class PrimaryButton extends StatelessWidget {
         padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       ),
-      child: isLoading
-          ? const SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation(AppColors.white),
-              ),
-            )
-          : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 16),
-                  const SizedBox(width: 8),
+      child:
+          isLoading
+              ? const SizedBox(
+                width: 20,
+                height: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(AppColors.white),
+                ),
+              )
+              : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (icon != null) ...[Icon(icon, size: 16), const SizedBox(width: 8)],
+                  Text(text, style: AppTextStyles.button),
                 ],
-                Text(text, style: AppTextStyles.button),
-              ],
-            ),
+              ),
     );
 
     return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
@@ -84,10 +83,7 @@ class SecondaryButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
-            Icon(icon, size: 16),
-            const SizedBox(width: 8),
-          ],
+          if (icon != null) ...[Icon(icon, size: 16), const SizedBox(width: 8)],
           Text(text, style: AppTextStyles.button),
         ],
       ),

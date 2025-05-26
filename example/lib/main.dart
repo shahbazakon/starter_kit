@@ -3,10 +3,10 @@ import 'package:starter_kit/starter_kit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   // Initialize dependency injection
   await configureDependencies(environment: 'dev');
-  
+
   runApp(const MyApp());
 }
 
@@ -77,7 +77,7 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
             _buildSection(
               title: '🔘 Button Components',
               children: [
-                PrimaryButton(
+                AppButton(
                   text: 'Primary Button',
                   icon: Icons.rocket_launch,
                   onPressed: () => _showSnackBar('Primary button pressed!'),
@@ -90,34 +90,34 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                   onPressed: () => _showSnackBar('Secondary button pressed!'),
                 ),
                 const SizedBox(height: 12),
-                OutlineButton(
-                  text: 'Outline Button',
-                  icon: Icons.favorite_border,
+                OutlinedButton.icon(
                   onPressed: () => _showSnackBar('Outline button pressed!'),
+                  icon: const Icon(Icons.favorite_border),
+                  label: const Text('Outline Button'),
                 ),
                 const SizedBox(height: 12),
                 Row(
                   children: [
                     Expanded(
-                      child: TextBtn(
-                        text: 'Text Button',
-                        icon: Icons.link,
+                      child: TextButton.icon(
                         onPressed: () => _showSnackBar('Text button pressed!'),
+                        icon: const Icon(Icons.link),
+                        label: const Text('Text Button'),
                       ),
                     ),
-                    IconBtn(
-                      icon: Icons.settings,
+                    IconButton(
                       onPressed: () => _showSnackBar('Icon button pressed!'),
+                      icon: const Icon(Icons.settings),
                     ),
-                    IconBtn(
-                      icon: Icons.favorite,
-                      color: AppColors.error,
+                    IconButton(
                       onPressed: () => _showSnackBar('Heart button pressed!'),
+                      icon: const Icon(Icons.favorite),
+                      color: AppColors.error,
                     ),
                   ],
                 ),
                 const SizedBox(height: 12),
-                PrimaryButton(
+                AppButton(
                   text: 'Toggle Loading',
                   onPressed: () => setState(() => _isLoading = !_isLoading),
                   fullWidth: true,
@@ -141,26 +141,29 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     // Validate email as user types
                     setState(() {});
                   },
-                  errorText: _emailController.text.isNotEmpty && 
-                             !StringUtils.isEmail(_emailController.text)
+                  errorText: _emailController.text.isNotEmpty &&
+                          !StringUtils.isEmail(_emailController.text)
                       ? 'Please enter a valid email address'
                       : null,
                 ),
                 const SizedBox(height: 16),
-                AppSearchField(
+                AppTextField(
                   controller: _searchController,
                   hintText: 'Search anything...',
+                  prefixIcon: Icons.search,
                   onChanged: (value) => AppLogger.d('Searching: $value'),
-                  onClear: () => AppLogger.d('Search cleared'),
                 ),
                 const SizedBox(height: 16),
-                AppDropdownField<String>(
-                  labelText: 'Country',
+                DropdownButtonFormField<String>(
                   value: _selectedCountry,
-                  hintText: 'Select your country',
-                  items: _countries.map((country) => 
-                    DropdownMenuItem(value: country, child: Text(country))
-                  ).toList(),
+                  decoration: const InputDecoration(
+                    labelText: 'Country',
+                    hintText: 'Select your country',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: _countries
+                      .map((country) => DropdownMenuItem(value: country, child: Text(country)))
+                      .toList(),
                   onChanged: (value) => setState(() => _selectedCountry = value),
                 ),
               ],
@@ -186,45 +189,128 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                AppListCard(
-                  title: 'John Doe',
-                  subtitle: 'Software Engineer at TechCorp',
-                  leading: const CircleAvatar(
-                    backgroundColor: AppColors.primary,
-                    child: Text('JD', style: TextStyle(color: AppColors.white)),
+                AppCard(
+                  child: ListTile(
+                    leading: const CircleAvatar(
+                      backgroundColor: AppColors.primary,
+                      child: Text('JD', style: TextStyle(color: AppColors.white)),
+                    ),
+                    title: const Text('John Doe'),
+                    subtitle: const Text('Software Engineer at TechCorp'),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+                    onTap: () => _showSnackBar('Profile tapped!'),
                   ),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () => _showSnackBar('Profile tapped!'),
                 ),
                 const SizedBox(height: 16),
-                AppInfoCard(
-                  title: 'System Information',
-                  icon: Icons.info,
-                  content: Column(
+                AppCard(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildInfoRow('App Version', '1.0.0'),
-                      _buildInfoRow('Build Number', '1'),
-                      _buildInfoRow('Platform', 'Flutter'),
-                      _buildInfoRow('Environment', 'Development'),
+                      Row(
+                        children: [
+                          const Icon(Icons.info, color: AppColors.primary, size: 20),
+                          const SizedBox(width: 8),
+                          Text('System Information', style: AppTextStyles.h6),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildInfoRow('App Version', '1.0.0'),
+                          _buildInfoRow('Build Number', '1'),
+                          _buildInfoRow('Platform', 'Flutter'),
+                          _buildInfoRow('Environment', 'Development'),
+                        ],
+                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                AppStatusCard.success(
-                  title: 'Connection Status',
-                  description: 'All systems are operational.',
-                  onTap: () => _showSnackBar('Status card tapped!'),
+                AppCard(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.success,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Icon(Icons.check_circle, color: AppColors.success, size: 24),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Connection Status', style: AppTextStyles.labelLarge),
+                            SizedBox(height: 4),
+                            Text('All systems are operational.', style: AppTextStyles.bodySmall),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 12),
-                AppStatusCard.warning(
-                  title: 'Storage Warning',
-                  description: 'Your storage is 80% full. Consider cleaning up.',
+                AppCard(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.warning,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Icon(Icons.warning, color: AppColors.warning, size: 24),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Storage Warning', style: AppTextStyles.labelLarge),
+                            SizedBox(height: 4),
+                            Text('Your storage is 80% full. Consider cleaning up.',
+                                style: AppTextStyles.bodySmall),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 12),
-                AppStatusCard.error(
-                  title: 'Sync Error',
-                  description: 'Failed to sync data. Please try again.',
+                AppCard(
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 4,
+                        height: 48,
+                        decoration: BoxDecoration(
+                          color: AppColors.error,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      const Icon(Icons.error, color: AppColors.error, size: 24),
+                      const SizedBox(width: 12),
+                      const Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Sync Error', style: AppTextStyles.labelLarge),
+                            SizedBox(height: 4),
+                            Text('Failed to sync data. Please try again.',
+                                style: AppTextStyles.bodySmall),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -241,14 +327,14 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('String Utils Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('capitalize("hello world")', 
-                                   StringUtils.capitalize('hello world')),
-                      _buildUtilRow('truncate("Very long text...", 10)', 
-                                   StringUtils.truncate('Very long text that needs truncation', 10)),
-                      _buildUtilRow('isEmail("test@example.com")', 
-                                   StringUtils.isEmail('test@example.com').toString()),
-                      _buildUtilRow('toCamelCase("hello world")', 
-                                   StringUtils.toCamelCase('hello world')),
+                      _buildUtilRow(
+                          'capitalize("hello world")', StringUtils.capitalize('hello world')),
+                      _buildUtilRow('truncate("Very long text...", 10)',
+                          StringUtils.truncate('Very long text that needs truncation', 10)),
+                      _buildUtilRow('isEmail("test@example.com")',
+                          StringUtils.isEmail('test@example.com').toString()),
+                      _buildUtilRow(
+                          'toCamelCase("hello world")', StringUtils.toCamelCase('hello world')),
                     ],
                   ),
                 ),
@@ -259,16 +345,15 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('Date Utils Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('formatDate(now)', 
-                                   AppDateUtils.formatDate(DateTime.now())),
-                      _buildUtilRow('formatRelativeTime(1 hour ago)', 
-                                   AppDateUtils.formatRelativeTime(
-                                     DateTime.now().subtract(const Duration(hours: 1)))),
-                      _buildUtilRow('isToday(now)', 
-                                   AppDateUtils.isToday(DateTime.now()).toString()),
-                      _buildUtilRow('formatDuration(2h 30m)', 
-                                   AppDateUtils.formatDuration(
-                                     const Duration(hours: 2, minutes: 30))),
+                      _buildUtilRow('formatDate(now)', AppDateUtils.formatDate(DateTime.now())),
+                      _buildUtilRow(
+                          'formatRelativeTime(1 hour ago)',
+                          AppDateUtils.formatRelativeTime(
+                              DateTime.now().subtract(const Duration(hours: 1)))),
+                      _buildUtilRow(
+                          'isToday(now)', AppDateUtils.isToday(DateTime.now()).toString()),
+                      _buildUtilRow('formatDuration(2h 30m)',
+                          AppDateUtils.formatDuration(const Duration(hours: 2, minutes: 30))),
                     ],
                   ),
                 ),
@@ -279,14 +364,13 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('Validators Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('email("test@example.com")', 
-                                   Validators.email('test@example.com') ?? 'Valid ✅'),
-                      _buildUtilRow('email("invalid-email")', 
-                                   Validators.email('invalid-email') ?? 'Valid ✅'),
-                      _buildUtilRow('phone("+1234567890")', 
-                                   Validators.phone('+1234567890') ?? 'Valid ✅'),
-                      _buildUtilRow('phone("123")', 
-                                   Validators.phone('123') ?? 'Valid ✅'),
+                      _buildUtilRow('email("test@example.com")',
+                          Validators.email('test@example.com') ?? 'Valid ✅'),
+                      _buildUtilRow(
+                          'email("invalid-email")', Validators.email('invalid-email') ?? 'Valid ✅'),
+                      _buildUtilRow(
+                          'phone("+1234567890")', Validators.phone('+1234567890') ?? 'Valid ✅'),
+                      _buildUtilRow('phone("123")', Validators.phone('123') ?? 'Valid ✅'),
                     ],
                   ),
                 ),
@@ -305,12 +389,12 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('API Configuration', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildInfoRow('Base URL', get<AppConfig>().apiBaseUrl),
-                      _buildInfoRow('Environment', get<AppConfig>().isDebug ? 'Debug' : 'Release'),
-                      _buildInfoRow('App Name', get<AppConfig>().appName),
-                      _buildInfoRow('Version', get<AppConfig>().appVersion),
+                      _buildInfoRow('Base URL', AppConfig.apiBaseUrl),
+                      _buildInfoRow('Environment', AppConfig.isDebug ? 'Debug' : 'Release'),
+                      _buildInfoRow('App Name', AppConfig.appName),
+                      _buildInfoRow('Version', AppConfig.appVersion),
                       const SizedBox(height: 16),
-                      PrimaryButton(
+                      AppButton(
                         text: 'Test API Call',
                         icon: Icons.cloud_sync,
                         onPressed: _testApiCall,
@@ -347,8 +431,8 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                         children: [
                           Text('Device Details', style: AppTextStyles.h5),
                           const SizedBox(height: 12),
-                          ...deviceInfo.entries.map((entry) => 
-                            _buildInfoRow(entry.key, entry.value)),
+                          ...deviceInfo.entries
+                              .map((entry) => _buildInfoRow(entry.key, entry.value)),
                         ],
                       );
                     },
@@ -370,10 +454,10 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  TextBtn(
-                    text: 'View Documentation',
-                    icon: Icons.book,
+                  TextButton.icon(
                     onPressed: () => _showSnackBar('Documentation opened!'),
+                    icon: const Icon(Icons.book),
+                    label: const Text('View Documentation'),
                   ),
                 ],
               ),
@@ -458,18 +542,18 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
 
   Future<void> _testApiCall() async {
     NavigationUtils.showLoadingDialog(message: 'Testing API...');
-    
+
     try {
       final apiClient = get<ApiClient>();
-      
+
       // Simulate API call delay
       await Future.delayed(const Duration(seconds: 2));
-      
+
       // This will fail as we don't have a real API, but it demonstrates the usage
       final response = await apiClient.get<Map<String, dynamic>>('/test');
-      
+
       NavigationUtils.hideLoadingDialog();
-      
+
       if (response.isSuccess) {
         _showSnackBar('API call successful!');
       } else {

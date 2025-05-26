@@ -1,6 +1,7 @@
 #!/usr/bin/env dart
 
 import 'dart:io';
+
 import 'package:args/args.dart';
 
 void main(List<String> arguments) {
@@ -33,9 +34,7 @@ void main(List<String> arguments) {
 
     final command = results.command;
     if (command == null) {
-      stderr.writeln(
-        '❌ No command specified. Use --help for usage information.',
-      );
+      stderr.writeln('❌ No command specified. Use --help for usage information.');
       exit(1);
     }
 
@@ -65,20 +64,14 @@ void main(List<String> arguments) {
 void _showHelp() {
   stdout.writeln('🚀 StarterKit CLI - Flutter Boilerplate Generator');
   stdout.writeln('');
-  stdout.writeln(
-    'Generate production-ready Flutter boilerplate code in seconds.',
-  );
+  stdout.writeln('Generate production-ready Flutter boilerplate code in seconds.');
   stdout.writeln('');
   stdout.writeln('📋 Usage: dart run starter_kit <command> [arguments]');
   stdout.writeln('');
   stdout.writeln('🛠️  Commands:');
-  stdout.writeln(
-    '  init             🏗️  Initialize complete boilerplate structure',
-  );
+  stdout.writeln('  init             🏗️  Initialize complete boilerplate structure');
   stdout.writeln('  add_screen       📱 Generate new screen with tests');
-  stdout.writeln(
-    '  add_api          🌐 Generate API service with repository pattern',
-  );
+  stdout.writeln('  add_api          🌐 Generate API service with repository pattern');
   stdout.writeln('  add_model        📦 Generate data model with entity');
   stdout.writeln('');
   stdout.writeln('🔧 Options:');
@@ -106,9 +99,7 @@ void _showVersion() {
 }
 
 void _initProject(List<String> arguments) {
-  stdout.writeln(
-    '🏗️  Initializing Flutter project with complete boilerplate...',
-  );
+  stdout.writeln('🏗️  Initializing Flutter project with complete boilerplate...');
   stdout.writeln('');
 
   // Create core directory structure
@@ -221,12 +212,8 @@ void _addApi(List<String> arguments) {
   stdout.writeln('  ✅ Repository: $repoPath');
 
   // Create repository interface
-  final interfaceContent = _generateRepositoryInterfaceTemplate(
-    serviceName,
-    fileName,
-  );
-  final interfacePath =
-      'lib/src/domain/repositories/${fileName}_repository.dart';
+  final interfaceContent = _generateRepositoryInterfaceTemplate(serviceName, fileName);
+  final interfacePath = 'lib/src/domain/repositories/${fileName}_repository.dart';
   _writeFile(interfacePath, interfaceContent);
   stdout.writeln('  ✅ Interface: $interfacePath');
 
@@ -463,10 +450,7 @@ class AppTextStyles {
   );
 }
 ''';
-  _writeFile(
-    'lib/src/core/design_system/theme/typography.dart',
-    typographyContent,
-  );
+  _writeFile('lib/src/core/design_system/theme/typography.dart', typographyContent);
 
   // Generate Theme
   final themeContent = '''import 'package:flutter/material.dart';
@@ -652,10 +636,7 @@ class SecondaryButton extends StatelessWidget {
   }
 }
 ''';
-  _writeFile(
-    'lib/src/core/design_system/components/buttons.dart',
-    buttonsContent,
-  );
+  _writeFile('lib/src/core/design_system/components/app_buttons.dart', buttonsContent);
 
   // Generate input components
   final inputsContent = '''import 'package:flutter/material.dart';
@@ -741,10 +722,7 @@ class AppTextField extends StatelessWidget {
   }
 }
 ''';
-  _writeFile(
-    'lib/src/core/design_system/components/inputs.dart',
-    inputsContent,
-  );
+  _writeFile('lib/src/core/design_system/components/app_text_inputs.dart', inputsContent);
 
   // Generate card components
   final cardsContent = '''import 'package:flutter/material.dart';
@@ -782,21 +760,18 @@ class AppCard extends StatelessWidget {
   }
 }
 ''';
-  _writeFile('lib/src/core/design_system/components/cards.dart', cardsContent);
+  _writeFile('lib/src/core/design_system/components/app_cards.dart', cardsContent);
 
   // Update design system exports
   final designSystemContent = '''// Design System Exports
 export 'theme/colors.dart';
 export 'theme/typography.dart';
 export 'theme/theme.dart';
-export 'components/buttons.dart';
-export 'components/inputs.dart';
-export 'components/cards.dart';
+export 'components/app_buttons.dart';
+export 'components/app_text_inputs.dart';
+export 'components/app_cards.dart';
 ''';
-  _writeFile(
-    'lib/src/core/design_system/design_system.dart',
-    designSystemContent,
-  );
+  _writeFile('lib/src/core/design_system/design_system.dart', designSystemContent);
 
   stdout.writeln('  ✅ Design System (Colors, Typography, Theme)');
 }
@@ -1332,10 +1307,7 @@ class NavigationUtils {
   }
 }
 ''';
-  _writeFile(
-    'lib/src/core/utils/navigation_utils.dart',
-    navigationUtilsContent,
-  );
+  _writeFile('lib/src/core/utils/navigation_utils.dart', navigationUtilsContent);
 
   // Logger utilities
   final loggerContent = '''import 'package:flutter/foundation.dart';
@@ -1720,10 +1692,7 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 ''';
-  _writeFile(
-    'lib/src/core/localization/app_localizations.dart',
-    localizationContent,
-  );
+  _writeFile('lib/src/core/localization/app_localizations.dart', localizationContent);
   stdout.writeln('  ✅ Localization Support');
 }
 
@@ -1754,9 +1723,7 @@ export 'src/data/models/api_response.dart';
 String _generateScreenTemplate(String screenName) {
   // Remove "Screen" from the end if it exists to avoid duplication
   final cleanScreenName =
-      screenName.endsWith('Screen')
-          ? screenName.substring(0, screenName.length - 6)
-          : screenName;
+      screenName.endsWith('Screen') ? screenName.substring(0, screenName.length - 6) : screenName;
 
   return '''import 'package:flutter/material.dart';
 import 'package:starter_kit/starter_kit.dart';
@@ -1785,9 +1752,7 @@ class _${cleanScreenName}ScreenState extends State<${cleanScreenName}Screen> {
 String _generateScreenTestTemplate(String screenName, String fileName) {
   // Remove "Screen" from the end if it exists to avoid duplication
   final cleanScreenName =
-      screenName.endsWith('Screen')
-          ? screenName.substring(0, screenName.length - 6)
-          : screenName;
+      screenName.endsWith('Screen') ? screenName.substring(0, screenName.length - 6) : screenName;
 
   return '''import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -1844,10 +1809,7 @@ class ${serviceName}RepositoryImpl implements I${serviceName}Repository {
 ''';
 }
 
-String _generateRepositoryInterfaceTemplate(
-  String serviceName,
-  String fileName,
-) {
+String _generateRepositoryInterfaceTemplate(String serviceName, String fileName) {
   return '''import 'package:starter_kit/starter_kit.dart';
 
 abstract class I${serviceName}Repository {

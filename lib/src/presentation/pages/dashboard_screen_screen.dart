@@ -30,11 +30,7 @@ class _DashboardScreenScreenState extends State<DashboardScreenScreen> {
               style: AppTextStyles.bodyMedium,
             ),
             const SizedBox(height: 24),
-            PrimaryButton(
-              text: 'Get Started',
-              onPressed: _handleGetStarted,
-              fullWidth: true,
-            ),
+            AppButton(text: 'Get Started', onPressed: _handleGetStarted, fullWidth: true),
           ],
         ),
       ),

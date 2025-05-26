@@ -10,7 +10,6 @@ void main(List<String> arguments) {
         ..addCommand('add_screen')
         ..addCommand('add_api')
         ..addCommand('add_model')
-        ..addCommand('generate')
         ..addFlag('help', abbr: 'h', help: 'Show usage information')
         ..addFlag('version', abbr: 'v', help: 'Show version information');
 
@@ -18,7 +17,7 @@ void main(List<String> arguments) {
     final results = parser.parse(arguments);
 
     if (results['help'] as bool) {
-      _showHelp(parser);
+      _showHelp();
       return;
     }
 
@@ -28,7 +27,7 @@ void main(List<String> arguments) {
     }
 
     if (arguments.isEmpty) {
-      _showHelp(parser);
+      _showHelp();
       return;
     }
 
@@ -53,9 +52,6 @@ void main(List<String> arguments) {
       case 'add_model':
         _addModel(command.arguments);
         break;
-      case 'generate':
-        _generateCode(command.arguments);
-        break;
       default:
         stderr.writeln('❌ Unknown command: ${command.name}');
         exit(1);
@@ -66,44 +62,56 @@ void main(List<String> arguments) {
   }
 }
 
-void _showHelp(ArgParser parser) {
-  stdout.writeln('🚀 StarterKit CLI - Flutter Project Generator');
+void _showHelp() {
+  stdout.writeln('🚀 StarterKit CLI - Flutter Boilerplate Generator');
   stdout.writeln('');
   stdout.writeln(
-    'A comprehensive Flutter boilerplate generator with clean architecture.',
+    'Generate production-ready Flutter boilerplate code in seconds.',
   );
   stdout.writeln('');
   stdout.writeln('📋 Usage: dart run starter_kit <command> [arguments]');
   stdout.writeln('');
-  stdout.writeln('🛠️  Available commands:');
+  stdout.writeln('🛠️  Commands:');
   stdout.writeln(
-    '  init         🏗️  Initialize a new Flutter project with StarterKit',
+    '  init             🏗️  Initialize complete boilerplate structure',
   );
-  stdout.writeln('  add_screen   📱 Add a new screen to the project');
-  stdout.writeln('  add_api      🌐 Add a new API service to the project');
-  stdout.writeln('  add_model    📦 Add a new data model to the project');
-  stdout.writeln('  generate     ⚡ Generate code from templates');
+  stdout.writeln('  add_screen       📱 Generate new screen with tests');
+  stdout.writeln(
+    '  add_api          🌐 Generate API service with repository pattern',
+  );
+  stdout.writeln('  add_model        📦 Generate data model with entity');
   stdout.writeln('');
-  stdout.writeln('🔧 Global options:');
-  stdout.writeln('  -h, --help     Show this help message');
-  stdout.writeln('  -v, --version  Show version information');
+  stdout.writeln('🔧 Options:');
+  stdout.writeln('  -h, --help       Show this help message');
+  stdout.writeln('  -v, --version    Show version information');
   stdout.writeln('');
   stdout.writeln('📖 Examples:');
   stdout.writeln('  dart run starter_kit init');
   stdout.writeln('  dart run starter_kit add_screen LoginScreen');
   stdout.writeln('  dart run starter_kit add_api UserService');
   stdout.writeln('  dart run starter_kit add_model User');
+  stdout.writeln('');
+  stdout.writeln('💡 The init command generates all essential boilerplate:');
+  stdout.writeln('   • Design System (Colors, Typography, Components)');
+  stdout.writeln('   • Network Layer (API Client, Error Handling)');
+  stdout.writeln('   • Utilities (Validators, String/Date helpers)');
+  stdout.writeln('   • Dependency Injection');
+  stdout.writeln('   • Localization Support');
+  stdout.writeln('   • Clean Architecture Structure');
 }
 
 void _showVersion() {
   stdout.writeln('StarterKit CLI v1.0.0');
-  stdout.writeln('Flutter boilerplate generator');
+  stdout.writeln('Flutter boilerplate generator for rapid development');
 }
 
 void _initProject(List<String> arguments) {
-  stdout.writeln('🏗️  Initializing new Flutter project with StarterKit...');
+  stdout.writeln(
+    '🏗️  Initializing Flutter project with complete boilerplate...',
+  );
+  stdout.writeln('');
 
-  // Create project structure
+  // Create core directory structure
   final directories = [
     'lib/src/core/config',
     'lib/src/core/design_system/components',
@@ -117,7 +125,6 @@ void _initProject(List<String> arguments) {
     'lib/src/data/repositories',
     'lib/src/domain/entities',
     'lib/src/domain/repositories',
-    'lib/src/domain/usecases',
     'lib/src/presentation/pages',
     'lib/src/presentation/widgets',
     'assets/icons',
@@ -128,24 +135,43 @@ void _initProject(List<String> arguments) {
     'test/integration',
   ];
 
+  stdout.writeln('📁 Creating directory structure...');
   for (final dir in directories) {
     final directory = Directory(dir);
     if (!directory.existsSync()) {
       directory.createSync(recursive: true);
-      stdout.writeln('  ✅ Created: $dir');
+      stdout.writeln('  ✅ $dir');
     }
   }
 
-  // Create example files
-  _createExampleFiles();
+  stdout.writeln('');
+  stdout.writeln('⚙️  Generating core functionality...');
+
+  // Generate all core files
+  _generateCoreConfig();
+  _generateDesignSystem();
+  _generateNetworkLayer();
+  _generateUtilities();
+  _generateDependencyInjection();
+  _generateLocalization();
+  _generateMainExports();
 
   stdout.writeln('');
-  stdout.writeln('🎉 Project initialized successfully!');
+  stdout.writeln('🎉 Project initialization completed successfully!');
   stdout.writeln('');
-  stdout.writeln('📝 Next steps:');
-  stdout.writeln('  1. Run: flutter pub add starter_kit');
-  stdout.writeln('  2. See example/ directory for usage examples');
-  stdout.writeln('  3. Start building your app!');
+  stdout.writeln('📝 Your boilerplate includes:');
+  stdout.writeln('  ✅ Complete Design System (WeChat-inspired)');
+  stdout.writeln('  ✅ Network Layer with Error Handling');
+  stdout.writeln('  ✅ Utility Functions & Validators');
+  stdout.writeln('  ✅ Dependency Injection Setup');
+  stdout.writeln('  ✅ Multi-language Support');
+  stdout.writeln('  ✅ Clean Architecture Structure');
+  stdout.writeln('');
+  stdout.writeln('🚀 Next steps:');
+  stdout.writeln('  1. Add starter_kit to your pubspec.yaml dependencies');
+  stdout.writeln('  2. Import: import "package:starter_kit/starter_kit.dart";');
+  stdout.writeln('  3. Initialize DI: await configureDependencies();');
+  stdout.writeln('  4. Start building with generated components!');
 }
 
 void _addScreen(List<String> arguments) {
@@ -158,29 +184,22 @@ void _addScreen(List<String> arguments) {
   final screenName = arguments[0];
   final fileName = _toSnakeCase(screenName.replaceAll('Screen', ''));
 
-  stdout.writeln('📱 Adding screen: $screenName');
+  stdout.writeln('📱 Generating screen: $screenName');
 
   // Create screen file
   final screenContent = _generateScreenTemplate(screenName);
   final screenPath = 'lib/src/presentation/pages/${fileName}_screen.dart';
-
   _writeFile(screenPath, screenContent);
-  stdout.writeln('  ✅ Created: $screenPath');
+  stdout.writeln('  ✅ Screen: $screenPath');
 
   // Create test file
-  final testContent = _generateScreenTestTemplate(screenName);
+  final testContent = _generateScreenTestTemplate(screenName, fileName);
   final testPath = 'test/widget/${fileName}_screen_test.dart';
-
   _writeFile(testPath, testContent);
-  stdout.writeln('  ✅ Created: $testPath');
+  stdout.writeln('  ✅ Test: $testPath');
 
   stdout.writeln('');
-  stdout.writeln('🎉 Screen $screenName added successfully!');
-  stdout.writeln('');
-  stdout.writeln('📝 Next steps:');
-  stdout.writeln('  1. Add navigation route in your app');
-  stdout.writeln('  2. Implement your UI logic');
-  stdout.writeln('  3. Run tests: flutter test $testPath');
+  stdout.writeln('🎉 Screen $screenName generated successfully!');
 }
 
 void _addApi(List<String> arguments) {
@@ -191,39 +210,34 @@ void _addApi(List<String> arguments) {
   }
 
   final serviceName = arguments[0];
-  final fileName = _toSnakeCase(serviceName);
+  final fileName = _toSnakeCase(serviceName.replaceAll('Service', ''));
 
-  stdout.writeln('🌐 Adding API service: $serviceName');
+  stdout.writeln('🌐 Generating API service: $serviceName');
 
-  // Create service file
-  final serviceContent = _generateApiServiceTemplate(serviceName);
-  final servicePath = 'lib/src/data/repositories/${fileName}_repository.dart';
-
-  _writeFile(servicePath, serviceContent);
-  stdout.writeln('  ✅ Created: $servicePath');
+  // Create repository implementation
+  final repoContent = _generateRepositoryTemplate(serviceName, fileName);
+  final repoPath = 'lib/src/data/repositories/${fileName}_repository.dart';
+  _writeFile(repoPath, repoContent);
+  stdout.writeln('  ✅ Repository: $repoPath');
 
   // Create repository interface
-  final interfaceContent = _generateRepositoryInterfaceTemplate(serviceName);
+  final interfaceContent = _generateRepositoryInterfaceTemplate(
+    serviceName,
+    fileName,
+  );
   final interfacePath =
       'lib/src/domain/repositories/${fileName}_repository.dart';
-
   _writeFile(interfacePath, interfaceContent);
-  stdout.writeln('  ✅ Created: $interfacePath');
+  stdout.writeln('  ✅ Interface: $interfacePath');
 
   // Create test file
-  final testContent = _generateApiTestTemplate(serviceName);
+  final testContent = _generateApiTestTemplate(serviceName, fileName);
   final testPath = 'test/unit/${fileName}_repository_test.dart';
-
   _writeFile(testPath, testContent);
-  stdout.writeln('  ✅ Created: $testPath');
+  stdout.writeln('  ✅ Test: $testPath');
 
   stdout.writeln('');
-  stdout.writeln('🎉 API service $serviceName added successfully!');
-  stdout.writeln('');
-  stdout.writeln('📝 Next steps:');
-  stdout.writeln('  1. Register repository in DI container');
-  stdout.writeln('  2. Implement API endpoints');
-  stdout.writeln('  3. Run tests: flutter test $testPath');
+  stdout.writeln('🎉 API service $serviceName generated successfully!');
 }
 
 void _addModel(List<String> arguments) {
@@ -236,80 +250,839 @@ void _addModel(List<String> arguments) {
   final modelName = arguments[0];
   final fileName = _toSnakeCase(modelName);
 
-  stdout.writeln('📦 Adding model: $modelName');
+  stdout.writeln('📦 Generating model: $modelName');
 
   // Create model file
   final modelContent = _generateModelTemplate(modelName);
-  final modelPath = 'lib/src/data/models/${fileName}.dart';
-
+  final modelPath = 'lib/src/data/models/$fileName.dart';
   _writeFile(modelPath, modelContent);
-  stdout.writeln('  ✅ Created: $modelPath');
+  stdout.writeln('  ✅ Model: $modelPath');
 
   // Create entity file
   final entityContent = _generateEntityTemplate(modelName);
-  final entityPath = 'lib/src/domain/entities/${fileName}.dart';
-
+  final entityPath = 'lib/src/domain/entities/$fileName.dart';
   _writeFile(entityPath, entityContent);
-  stdout.writeln('  ✅ Created: $entityPath');
+  stdout.writeln('  ✅ Entity: $entityPath');
 
   // Create test file
-  final testContent = _generateModelTestTemplate(modelName);
+  final testContent = _generateModelTestTemplate(modelName, fileName);
   final testPath = 'test/unit/${fileName}_test.dart';
-
   _writeFile(testPath, testContent);
-  stdout.writeln('  ✅ Created: $testPath');
+  stdout.writeln('  ✅ Test: $testPath');
 
   stdout.writeln('');
-  stdout.writeln('🎉 Model $modelName added successfully!');
-  stdout.writeln('');
-  stdout.writeln('📝 Next steps:');
-  stdout.writeln('  1. Update model properties as needed');
-  stdout.writeln('  2. Add JSON serialization if required');
-  stdout.writeln('  3. Run tests: flutter test $testPath');
+  stdout.writeln('🎉 Model $modelName generated successfully!');
 }
 
-void _generateCode(List<String> arguments) {
-  stdout.writeln('⚡ Generating code from templates...');
-
-  // Generate barrel files
-  _generateBarrelFiles();
-
-  // Generate asset references
-  _generateAssetReferences();
-
-  stdout.writeln('');
-  stdout.writeln('🎉 Code generation completed successfully!');
+String _toSnakeCase(String text) {
+  return text
+      .replaceAllMapped(RegExp(r'[A-Z]'), (match) => '_${match.group(0)}')
+      .toLowerCase()
+      .replaceAll(RegExp(r'^_'), '')
+      .replaceAll(RegExp(r'_{2,}'), '_');
 }
 
-void _createExampleFiles() {
-  // Create example main.dart
-  final mainContent = _generateExampleMainTemplate();
-  _writeFile('example/lib/main.dart', mainContent);
-
-  // Create example pubspec.yaml
-  final pubspecContent = _generateExamplePubspecTemplate();
-  _writeFile('example/pubspec.yaml', pubspecContent);
-
-  // Create example README
-  final readmeContent = _generateExampleReadmeTemplate();
-  _writeFile('example/README.md', readmeContent);
+// Core generation methods
+void _generateCoreConfig() {
+  final content = '''/// Application configuration
+class AppConfig {
+  static const String appName = 'MyApp';
+  static const String appVersion = '1.0.0';
+  static const String apiBaseUrl = 'https://api.example.com';
+  static const bool isDebug = true;
+  static const int apiTimeout = 30000;
+  
+  // Environment configurations
+  static String get environment => isDebug ? 'development' : 'production';
+  
+  // API configurations
+  static Map<String, String> get defaultHeaders => {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+  };
+}
+''';
+  _writeFile('lib/src/core/config/app_config.dart', content);
+  stdout.writeln('  ✅ App Configuration');
 }
 
-void _generateBarrelFiles() {
-  stdout.writeln('  ✅ Generating barrel export files...');
-  // Implementation for barrel file generation
+void _generateDesignSystem() {
+  // Generate Colors
+  final colorsContent = '''import 'package:flutter/material.dart';
+
+/// Application color palette inspired by WeChat design
+class AppColors {
+  // Primary colors
+  static const Color primary = Color(0xFF07C160);
+  static const Color primaryDark = Color(0xFF05A050);
+  static const Color primaryLight = Color(0xFF4CD98B);
+  
+  // Secondary colors
+  static const Color secondary = Color(0xFF576B95);
+  static const Color secondaryDark = Color(0xFF3F5177);
+  static const Color secondaryLight = Color(0xFF7A8BB5);
+  
+  // Neutral colors
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color black = Color(0xFF000000);
+  static const Color background = Color(0xFFF7F7F7);
+  static const Color surface = Color(0xFFFFFFFF);
+  static const Color surfaceVariant = Color(0xFFF5F5F5);
+  
+  // Text colors
+  static const Color textPrimary = Color(0xFF1A1A1A);
+  static const Color textSecondary = Color(0xFF8C8C8C);
+  static const Color textTertiary = Color(0xFFBFBFBF);
+  static const Color textDisabled = Color(0xFFD9D9D9);
+  
+  // Status colors
+  static const Color success = Color(0xFF52C41A);
+  static const Color warning = Color(0xFFFAAD14);
+  static const Color error = Color(0xFFF5222D);
+  static const Color info = Color(0xFF1890FF);
+  
+  // Border colors
+  static const Color border = Color(0xFFE5E5E5);
+  static const Color borderLight = Color(0xFFF0F0F0);
+  static const Color borderDark = Color(0xFFD9D9D9);
+  
+  // Shadow colors
+  static const Color shadow = Color(0x1A000000);
+  static const Color shadowLight = Color(0x0D000000);
+  static const Color shadowDark = Color(0x26000000);
+}
+''';
+  _writeFile('lib/src/core/design_system/theme/colors.dart', colorsContent);
+
+  // Generate Typography
+  final typographyContent = '''import 'package:flutter/material.dart';
+import 'colors.dart';
+
+/// Application text styles
+class AppTextStyles {
+  // Headings
+  static const TextStyle h1 = TextStyle(
+    fontSize: 32,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    height: 1.25,
+  );
+  
+  static const TextStyle h2 = TextStyle(
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+    color: AppColors.textPrimary,
+    height: 1.29,
+  );
+  
+  static const TextStyle h3 = TextStyle(
+    fontSize: 24,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.33,
+  );
+  
+  static const TextStyle h4 = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.4,
+  );
+  
+  static const TextStyle h5 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.44,
+  );
+  
+  static const TextStyle h6 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
+  
+  // Body text
+  static const TextStyle bodyLarge = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+    height: 1.5,
+  );
+  
+  static const TextStyle bodyMedium = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textPrimary,
+    height: 1.43,
+  );
+  
+  static const TextStyle bodySmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textSecondary,
+    height: 1.33,
+  );
+  
+  // Labels
+  static const TextStyle labelLarge = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    height: 1.43,
+  );
+  
+  static const TextStyle labelMedium = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    height: 1.33,
+  );
+  
+  static const TextStyle labelSmall = TextStyle(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textSecondary,
+    height: 1.45,
+  );
+  
+  // Button text
+  static const TextStyle button = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    height: 1.43,
+  );
+  
+  // Caption
+  static const TextStyle caption = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.normal,
+    color: AppColors.textSecondary,
+    height: 1.6,
+  );
+}
+''';
+  _writeFile(
+    'lib/src/core/design_system/theme/typography.dart',
+    typographyContent,
+  );
+
+  // Generate Theme
+  final themeContent = '''import 'package:flutter/material.dart';
+import 'colors.dart';
+import 'typography.dart';
+
+/// Application theme configuration
+class AppTheme {
+  static ThemeData get lightTheme {
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        brightness: Brightness.light,
+        primary: AppColors.primary,
+        surface: AppColors.surface,
+      ),
+      textTheme: const TextTheme(
+        displayLarge: AppTextStyles.h1,
+        displayMedium: AppTextStyles.h2,
+        displaySmall: AppTextStyles.h3,
+        headlineLarge: AppTextStyles.h4,
+        headlineMedium: AppTextStyles.h5,
+        headlineSmall: AppTextStyles.h6,
+        bodyLarge: AppTextStyles.bodyLarge,
+        bodyMedium: AppTextStyles.bodyMedium,
+        bodySmall: AppTextStyles.bodySmall,
+        labelLarge: AppTextStyles.labelLarge,
+        labelMedium: AppTextStyles.labelMedium,
+        labelSmall: AppTextStyles.labelSmall,
+      ),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        elevation: 0,
+        centerTitle: true,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.white,
+          textStyle: AppTextStyles.button,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.error),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+      cardTheme: CardTheme(
+        color: AppColors.surface,
+        elevation: 2,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+  
+  static ThemeData get darkTheme {
+    return ThemeData(
+      useMaterial3: true,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: AppColors.primary,
+        brightness: Brightness.dark,
+      ),
+    );
+  }
+}
+''';
+  _writeFile('lib/src/core/design_system/theme/theme.dart', themeContent);
+
+  // Update design system exports
+  final designSystemContent = '''// Design System Exports
+export 'theme/colors.dart';
+export 'theme/typography.dart';
+export 'theme/theme.dart';
+export 'components/buttons.dart';
+export 'components/inputs.dart';
+export 'components/cards.dart';
+''';
+  _writeFile(
+    'lib/src/core/design_system/design_system.dart',
+    designSystemContent,
+  );
+
+  stdout.writeln('  ✅ Design System (Colors, Typography, Theme)');
 }
 
-void _generateAssetReferences() {
-  stdout.writeln('  ✅ Generating asset reference files...');
-  // Implementation for asset reference generation
+void _generateNetworkLayer() {
+  // Override the existing API client with updated version
+  final apiClientContent = '''import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import '../config/app_config.dart';
+import '../../data/models/api_response.dart';
+
+/// HTTP client for API requests
+class ApiClient {
+  late final Dio _dio;
+  
+  ApiClient() {
+    _dio = Dio(BaseOptions(
+      baseUrl: AppConfig.apiBaseUrl,
+      connectTimeout: const Duration(milliseconds: AppConfig.apiTimeout),
+      receiveTimeout: const Duration(milliseconds: AppConfig.apiTimeout),
+      headers: AppConfig.defaultHeaders,
+    ));
+    
+    if (kDebugMode) {
+      _dio.interceptors.add(LogInterceptor(
+        requestBody: true,
+        responseBody: true,
+      ));
+    }
+  }
+  
+  /// GET request
+  Future<ApiResponse<T>> get<T>(String path, {Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _dio.get(path, queryParameters: queryParameters);
+      return ApiResponse.success(response.data as T);
+    } on DioException catch (e) {
+      return ApiResponse.error(_handleError(e));
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: \$e');
+    }
+  }
+  
+  /// POST request
+  Future<ApiResponse<T>> post<T>(String path, {dynamic data, Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _dio.post(path, data: data, queryParameters: queryParameters);
+      return ApiResponse.success(response.data as T);
+    } on DioException catch (e) {
+      return ApiResponse.error(_handleError(e));
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: \$e');
+    }
+  }
+  
+  /// PUT request
+  Future<ApiResponse<T>> put<T>(String path, {dynamic data, Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _dio.put(path, data: data, queryParameters: queryParameters);
+      return ApiResponse.success(response.data as T);
+    } on DioException catch (e) {
+      return ApiResponse.error(_handleError(e));
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: \$e');
+    }
+  }
+  
+  /// DELETE request
+  Future<ApiResponse<T>> delete<T>(String path, {Map<String, dynamic>? queryParameters}) async {
+    try {
+      final response = await _dio.delete(path, queryParameters: queryParameters);
+      return ApiResponse.success(response.data as T);
+    } on DioException catch (e) {
+      return ApiResponse.error(_handleError(e));
+    } catch (e) {
+      return ApiResponse.error('Unexpected error: \$e');
+    }
+  }
+  
+  String _handleError(DioException error) {
+    switch (error.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.sendTimeout:
+      case DioExceptionType.receiveTimeout:
+        return 'Connection timeout. Please check your internet connection.';
+      case DioExceptionType.badResponse:
+        final statusCode = error.response?.statusCode;
+        final message = error.response?.data?['message'] ?? 'Unknown server error';
+        return 'Server error (\$statusCode): \$message';
+      case DioExceptionType.cancel:
+        return 'Request was cancelled';
+      case DioExceptionType.unknown:
+        if (error.error is SocketException) {
+          return 'No internet connection';
+        }
+        return 'Network error occurred';
+      default:
+        return 'An unexpected error occurred';
+    }
+  }
+}
+''';
+  _writeFile('lib/src/core/network/api_client.dart', apiClientContent);
+
+  stdout.writeln('  ✅ Network Layer (API Client, Response Model)');
 }
 
+void _generateUtilities() {
+  // String utilities
+  final stringUtilsContent = '''/// String manipulation utilities
+class StringUtils {
+  /// Capitalize first letter
+  static String capitalize(String text) {
+    if (text.isEmpty) return text;
+    return text[0].toUpperCase() + text.substring(1).toLowerCase();
+  }
+  
+  /// Convert to camelCase
+  static String toCamelCase(String text) {
+    final words = text.split(RegExp(r'[\\s_-]+'));
+    if (words.isEmpty) return '';
+    
+    final first = words.first.toLowerCase();
+    final rest = words.skip(1).map((word) => capitalize(word));
+    return first + rest.join();
+  }
+  
+  /// Convert to snake_case
+  static String toSnakeCase(String text) {
+    return text
+        .replaceAllMapped(RegExp(r'[A-Z]'), (match) => '_\${match.group(0)}')
+        .toLowerCase()
+        .replaceAll(RegExp(r'^_'), '');
+  }
+  
+  /// Truncate text with ellipsis
+  static String truncate(String text, int maxLength, {String suffix = '...'}) {
+    if (text.length <= maxLength) return text;
+    return text.substring(0, maxLength - suffix.length) + suffix;
+  }
+  
+  /// Check if string is valid email
+  static bool isEmail(String email) {
+    return RegExp(r'^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$').hasMatch(email);
+  }
+  
+  /// Check if string is valid phone number
+  static bool isPhoneNumber(String phone) {
+    return RegExp(r'^[\\+]?[1-9]?[0-9]{7,15}\$').hasMatch(phone);
+  }
+  
+  /// Check if string is valid URL
+  static bool isUrl(String url) {
+    return RegExp(r'^https?:\\/\\/.+').hasMatch(url);
+  }
+  
+  /// Remove HTML tags
+  static String removeHtmlTags(String html) {
+    return html.replaceAll(RegExp(r'<[^>]*>'), '');
+  }
+  
+  /// Generate random string
+  static String randomString(int length) {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    return List.generate(length, (index) => chars[(DateTime.now().millisecondsSinceEpoch + index) % chars.length]).join();
+  }
+}
+''';
+  _writeFile('lib/src/core/utils/string_utils.dart', stringUtilsContent);
+
+  // Date utilities
+  final dateUtilsContent = '''/// Date and time utilities
+class AppDateUtils {
+  /// Format date to readable string
+  static String formatDate(DateTime date, {String format = 'MMM dd, yyyy'}) {
+    // Simple date formatting - in production, use intl package
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                   'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    return '\${months[date.month - 1]} \${date.day.toString().padLeft(2, '0')}, \${date.year}';
+  }
+  
+  /// Format time to readable string
+  static String formatTime(DateTime date) {
+    final hour = date.hour > 12 ? date.hour - 12 : date.hour;
+    final period = date.hour >= 12 ? 'PM' : 'AM';
+    return '\${hour == 0 ? 12 : hour}:\${date.minute.toString().padLeft(2, '0')} \$period';
+  }
+  
+  /// Get relative time (e.g., "2 hours ago")
+  static String formatRelativeTime(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+    
+    if (difference.inDays > 7) {
+      return formatDate(date);
+    } else if (difference.inDays > 0) {
+      return '\${difference.inDays} day\${difference.inDays == 1 ? '' : 's'} ago';
+    } else if (difference.inHours > 0) {
+      return '\${difference.inHours} hour\${difference.inHours == 1 ? '' : 's'} ago';
+    } else if (difference.inMinutes > 0) {
+      return '\${difference.inMinutes} minute\${difference.inMinutes == 1 ? '' : 's'} ago';
+    } else {
+      return 'Just now';
+    }
+  }
+  
+  /// Check if date is today
+  static bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return date.year == now.year && date.month == now.month && date.day == now.day;
+  }
+  
+  /// Check if date is yesterday
+  static bool isYesterday(DateTime date) {
+    final yesterday = DateTime.now().subtract(const Duration(days: 1));
+    return date.year == yesterday.year && date.month == yesterday.month && date.day == yesterday.day;
+  }
+  
+  /// Format duration to readable string
+  static String formatDuration(Duration duration) {
+    final hours = duration.inHours;
+    final minutes = duration.inMinutes % 60;
+    
+    if (hours > 0) {
+      return '\${hours}h \${minutes}m';
+    } else {
+      return '\${minutes}m';
+    }
+  }
+  
+  /// Get start of day
+  static DateTime startOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
+  }
+  
+  /// Get end of day
+  static DateTime endOfDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day, 23, 59, 59, 999);
+  }
+}
+''';
+  _writeFile('lib/src/core/utils/date_utils.dart', dateUtilsContent);
+
+  // Validators
+  final validatorsContent = '''/// Form validation utilities
+class Validators {
+  /// Validate email
+  static String? email(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    if (!RegExp(r'^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}\$').hasMatch(value)) {
+      return 'Enter a valid email address';
+    }
+    return null;
+  }
+  
+  /// Validate password
+  static String? password(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Password is required';
+    }
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
+    }
+    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)').hasMatch(value)) {
+      return 'Password must contain uppercase, lowercase, and number';
+    }
+    return null;
+  }
+  
+  /// Validate phone number
+  static String? phone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number is required';
+    }
+    if (!RegExp(r'^[\\+]?[1-9]?[0-9]{7,15}\$').hasMatch(value)) {
+      return 'Enter a valid phone number';
+    }
+    return null;
+  }
+  
+  /// Validate required field
+  static String? required(String? value, {String fieldName = 'This field'}) {
+    if (value == null || value.trim().isEmpty) {
+      return '\$fieldName is required';
+    }
+    return null;
+  }
+  
+  /// Validate minimum length
+  static String? minLength(String? value, int minLength, {String fieldName = 'This field'}) {
+    if (value == null || value.length < minLength) {
+      return '\$fieldName must be at least \$minLength characters';
+    }
+    return null;
+  }
+  
+  /// Validate maximum length
+  static String? maxLength(String? value, int maxLength, {String fieldName = 'This field'}) {
+    if (value != null && value.length > maxLength) {
+      return '\$fieldName must not exceed \$maxLength characters';
+    }
+    return null;
+  }
+  
+  /// Validate URL
+  static String? url(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'URL is required';
+    }
+    if (!RegExp(r'^https?:\\/\\/.+').hasMatch(value)) {
+      return 'Enter a valid URL';
+    }
+    return null;
+  }
+  
+  /// Validate numeric value
+  static String? numeric(String? value, {String fieldName = 'This field'}) {
+    if (value == null || value.isEmpty) {
+      return '\$fieldName is required';
+    }
+    if (double.tryParse(value) == null) {
+      return '\$fieldName must be a number';
+    }
+    return null;
+  }
+}
+''';
+  _writeFile('lib/src/core/utils/validators.dart', validatorsContent);
+
+  // Utils export file
+  final utilsContent = '''// Utility Exports
+export 'string_utils.dart';
+export 'date_utils.dart';
+export 'validators.dart';
+export 'navigation_utils.dart';
+export 'logger.dart';
+export 'device_utils.dart';
+''';
+  _writeFile('lib/src/core/utils/utils.dart', utilsContent);
+
+  stdout.writeln('  ✅ Utilities (String, Date, Validators)');
+}
+
+void _generateDependencyInjection() {
+  final diContent = '''import 'package:get_it/get_it.dart';
+import '../config/app_config.dart';
+import '../network/api_client.dart';
+
+/// Dependency injection container
+final GetIt getIt = GetIt.instance;
+
+/// Shorthand for getting dependencies
+T get<T extends Object>() => getIt<T>();
+
+/// Configure dependencies for different environments
+Future<void> configureDependencies({String environment = 'production'}) async {
+  // Register core services
+  getIt.registerLazySingleton<AppConfig>(() => AppConfig());
+  getIt.registerLazySingleton<ApiClient>(() => ApiClient());
+  
+  // Environment-specific configurations
+  switch (environment) {
+    case 'development':
+    case 'dev':
+      await _configureDevelopmentDependencies();
+      break;
+    case 'staging':
+      await _configureStagingDependencies();
+      break;
+    case 'production':
+    default:
+      await _configureProductionDependencies();
+      break;
+  }
+}
+
+Future<void> _configureDevelopmentDependencies() async {
+  // Development-specific services
+  // Example: Mock services, debug tools
+}
+
+Future<void> _configureStagingDependencies() async {
+  // Staging-specific services
+  // Example: Analytics, crash reporting
+}
+
+Future<void> _configureProductionDependencies() async {
+  // Production-specific services
+  // Example: Analytics, crash reporting, performance monitoring
+}
+
+/// Reset dependencies (useful for testing)
+void resetDependencies() {
+  getIt.reset();
+}
+''';
+  _writeFile('lib/src/core/di/di.dart', diContent);
+  stdout.writeln('  ✅ Dependency Injection');
+}
+
+void _generateLocalization() {
+  final localizationContent = '''import 'package:flutter/material.dart';
+
+/// Basic localization support
+class AppLocalizations {
+  final Locale locale;
+  
+  AppLocalizations(this.locale);
+  
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
+  }
+  
+  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  
+  static const List<Locale> supportedLocales = [
+    Locale('en', ''),
+    Locale('es', ''),
+    Locale('fr', ''),
+  ];
+  
+  // Common strings
+  String get appName => _get('appName');
+  String get loading => _get('loading');
+  String get error => _get('error');
+  String get success => _get('success');
+  String get cancel => _get('cancel');
+  String get ok => _get('ok');
+  String get save => _get('save');
+  String get delete => _get('delete');
+  String get edit => _get('edit');
+  
+  String _get(String key) {
+    final strings = _localizedValues[locale.languageCode] ?? _localizedValues['en']!;
+    return strings[key] ?? key;
+  }
+  
+  static const Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      'appName': 'My App',
+      'loading': 'Loading...',
+      'error': 'Error',
+      'success': 'Success',
+      'cancel': 'Cancel',
+      'ok': 'OK',
+      'save': 'Save',
+      'delete': 'Delete',
+      'edit': 'Edit',
+    },
+    'es': {
+      'appName': 'Mi Aplicación',
+      'loading': 'Cargando...',
+      'error': 'Error',
+      'success': 'Éxito',
+      'cancel': 'Cancelar',
+      'ok': 'OK',
+      'save': 'Guardar',
+      'delete': 'Eliminar',
+      'edit': 'Editar',
+    },
+  };
+}
+
+class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
+  
+  @override
+  bool isSupported(Locale locale) {
+    return AppLocalizations.supportedLocales.any((l) => l.languageCode == locale.languageCode);
+  }
+  
+  @override
+  Future<AppLocalizations> load(Locale locale) async {
+    return AppLocalizations(locale);
+  }
+  
+  @override
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
+}
+''';
+  _writeFile(
+    'lib/src/core/localization/app_localizations.dart',
+    localizationContent,
+  );
+  stdout.writeln('  ✅ Localization Support');
+}
+
+void _generateMainExports() {
+  final exportsContent = '''// StarterKit - Flutter Boilerplate Generator
+//
+// Complete boilerplate with clean architecture, design system,
+// and essential utilities for rapid Flutter development.
+
+// Core exports
+export 'src/core/config/app_config.dart';
+export 'src/core/design_system/design_system.dart';
+export 'src/core/di/di.dart';
+export 'src/core/localization/app_localizations.dart';
+export 'src/core/network/api_client.dart';
+export 'src/core/utils/utils.dart';
+
+// Data layer exports
+export 'src/data/models/api_response.dart';
+
+// Domain layer exports (add as needed)
+''';
+  _writeFile('lib/starter_kit.dart', exportsContent);
+  stdout.writeln('  ✅ Main Exports Updated');
+}
+
+// Template generation methods (simplified versions)
 String _generateScreenTemplate(String screenName) {
   return '''import 'package:flutter/material.dart';
 import 'package:starter_kit/starter_kit.dart';
 
-/// $screenName screen widget
 class ${screenName}Screen extends StatefulWidget {
   const ${screenName}Screen({super.key});
 
@@ -321,130 +1094,79 @@ class _${screenName}ScreenState extends State<${screenName}Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('$screenName'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
+      appBar: AppBar(title: const Text('$screenName')),
+      body: const Center(
+        child: Text('$screenName Screen'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome to $screenName',
-              style: AppTextStyles.h1,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'This is a generated screen. Start building your UI here!',
-              style: AppTextStyles.bodyMedium,
-            ),
-            const SizedBox(height: 24),
-            PrimaryButton(
-              text: 'Get Started',
-              onPressed: _handleGetStarted,
-              fullWidth: true,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _handleGetStarted() {
-    NavigationUtils.showSnackBar(
-      message: 'Button pressed in $screenName!',
     );
   }
 }
 ''';
 }
 
-String _generateScreenTestTemplate(String screenName) {
+String _generateScreenTestTemplate(String screenName, String fileName) {
   return '''import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:starter_kit/starter_kit.dart';
-import 'package:starter_kit/src/presentation/pages/${_toSnakeCase(screenName)}_screen.dart';
+import 'package:starter_kit/src/presentation/pages/${fileName}_screen.dart';
 
 void main() {
   group('${screenName}Screen Tests', () {
-    testWidgets('should display screen title', (tester) async {
+    testWidgets('should display screen', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: const ${screenName}Screen(),
-          navigatorKey: NavigationUtils.navigatorKey,
-        ),
+        MaterialApp(home: ${screenName}Screen()),
       );
-
-      expect(find.text('$screenName'), findsOneWidget);
-      expect(find.text('Welcome to $screenName'), findsOneWidget);
-      expect(find.text('Get Started'), findsOneWidget);
-    });
-
-    testWidgets('should handle button press', (tester) async {
-      await tester.pumpWidget(
-        MaterialApp(
-          home: const ${screenName}Screen(),
-          navigatorKey: NavigationUtils.navigatorKey,
-        ),
-      );
-
-      await tester.tap(find.text('Get Started'));
-      await tester.pump();
-
-      // Add your assertions here
+      
+      expect(find.text('$screenName Screen'), findsOneWidget);
     });
   });
 }
 ''';
 }
 
-String _generateApiServiceTemplate(String serviceName) {
-  final repositoryName = '${serviceName}Repository';
+String _generateRepositoryTemplate(String serviceName, String fileName) {
   return '''import 'package:starter_kit/starter_kit.dart';
-import '../../domain/repositories/${_toSnakeCase(serviceName)}_repository.dart';
+import '../../domain/repositories/${fileName}_repository.dart';
 
-/// Implementation of $repositoryName
-class ${repositoryName}Impl implements I$repositoryName {
+class ${serviceName}RepositoryImpl implements I${serviceName}Repository {
   final ApiClient _apiClient;
-
-  ${repositoryName}Impl(this._apiClient);
-
+  
+  ${serviceName}RepositoryImpl(this._apiClient);
+  
   @override
   Future<ApiResponse<List<Map<String, dynamic>>>> getAll() async {
-    return await _apiClient.get<List<Map<String, dynamic>>>('/${_toSnakeCase(serviceName)}s');
+    return await _apiClient.get('/${fileName}s');
   }
-
+  
   @override
   Future<ApiResponse<Map<String, dynamic>>> getById(String id) async {
-    return await _apiClient.get<Map<String, dynamic>>('/${_toSnakeCase(serviceName)}s/\$id');
+    return await _apiClient.get('/${fileName}s/\$id');
   }
-
+  
   @override
   Future<ApiResponse<Map<String, dynamic>>> create(Map<String, dynamic> data) async {
-    return await _apiClient.post<Map<String, dynamic>>('/${_toSnakeCase(serviceName)}s', data: data);
+    return await _apiClient.post('/${fileName}s', data: data);
   }
-
+  
   @override
   Future<ApiResponse<Map<String, dynamic>>> update(String id, Map<String, dynamic> data) async {
-    return await _apiClient.put<Map<String, dynamic>>('/${_toSnakeCase(serviceName)}s/\$id', data: data);
+    return await _apiClient.put('/${fileName}s/\$id', data: data);
   }
-
+  
   @override
   Future<ApiResponse<void>> delete(String id) async {
-    return await _apiClient.delete<void>('/${_toSnakeCase(serviceName)}s/\$id');
+    return await _apiClient.delete('/${fileName}s/\$id');
   }
 }
 ''';
 }
 
-String _generateRepositoryInterfaceTemplate(String serviceName) {
-  final repositoryName = '${serviceName}Repository';
+String _generateRepositoryInterfaceTemplate(
+  String serviceName,
+  String fileName,
+) {
   return '''import 'package:starter_kit/starter_kit.dart';
 
-/// Repository interface for $serviceName
-abstract class I$repositoryName {
+abstract class I${serviceName}Repository {
   Future<ApiResponse<List<Map<String, dynamic>>>> getAll();
   Future<ApiResponse<Map<String, dynamic>>> getById(String id);
   Future<ApiResponse<Map<String, dynamic>>> create(Map<String, dynamic> data);
@@ -454,46 +1176,14 @@ abstract class I$repositoryName {
 ''';
 }
 
-String _generateApiTestTemplate(String serviceName) {
-  final repositoryName = '${serviceName}Repository';
+String _generateApiTestTemplate(String serviceName, String fileName) {
   return '''import 'package:flutter_test/flutter_test.dart';
-import 'package:starter_kit/starter_kit.dart';
-import '../../lib/src/data/repositories/${_toSnakeCase(serviceName)}_repository.dart';
 
 void main() {
-  group('${repositoryName}Impl Tests', () {
-    late ${repositoryName}Impl repository;
-    late ApiClient mockApiClient;
-
-    setUp(() {
-      // TODO: Create mock ApiClient
-      // mockApiClient = MockApiClient();
-      // repository = ${repositoryName}Impl(mockApiClient);
-    });
-
-    test('should get all items', () async {
-      // TODO: Implement test
-      expect(true, true); // Placeholder
-    });
-
-    test('should get item by id', () async {
-      // TODO: Implement test
-      expect(true, true); // Placeholder
-    });
-
-    test('should create new item', () async {
-      // TODO: Implement test
-      expect(true, true); // Placeholder
-    });
-
-    test('should update existing item', () async {
-      // TODO: Implement test
-      expect(true, true); // Placeholder
-    });
-
-    test('should delete item', () async {
-      // TODO: Implement test
-      expect(true, true); // Placeholder
+  group('${serviceName}Repository Tests', () {
+    test('should perform CRUD operations', () {
+      // TODO: Implement tests with mocks
+      expect(true, true);
     });
   });
 }
@@ -503,7 +1193,6 @@ void main() {
 String _generateModelTemplate(String modelName) {
   return '''import 'package:equatable/equatable.dart';
 
-/// Data model for $modelName
 class $modelName extends Equatable {
   final String id;
   final String name;
@@ -517,7 +1206,6 @@ class $modelName extends Equatable {
     required this.updatedAt,
   });
 
-  /// Create $modelName from JSON
   factory $modelName.fromJson(Map<String, dynamic> json) {
     return $modelName(
       id: json['id'] as String,
@@ -527,7 +1215,6 @@ class $modelName extends Equatable {
     );
   }
 
-  /// Convert $modelName to JSON
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -537,7 +1224,6 @@ class $modelName extends Equatable {
     };
   }
 
-  /// Create a copy with updated values
   $modelName copyWith({
     String? id,
     String? name,
@@ -554,11 +1240,6 @@ class $modelName extends Equatable {
 
   @override
   List<Object?> get props => [id, name, createdAt, updatedAt];
-
-  @override
-  String toString() {
-    return '$modelName{id: \$id, name: \$name, createdAt: \$createdAt, updatedAt: \$updatedAt}';
-  }
 }
 ''';
 }
@@ -566,7 +1247,6 @@ class $modelName extends Equatable {
 String _generateEntityTemplate(String modelName) {
   return '''import 'package:equatable/equatable.dart';
 
-/// Domain entity for $modelName
 class ${modelName}Entity extends Equatable {
   final String id;
   final String name;
@@ -582,25 +1262,20 @@ class ${modelName}Entity extends Equatable {
 
   @override
   List<Object?> get props => [id, name, createdAt, updatedAt];
-
-  @override
-  String toString() {
-    return '${modelName}Entity{id: \$id, name: \$name, createdAt: \$createdAt, updatedAt: \$updatedAt}';
-  }
 }
 ''';
 }
 
-String _generateModelTestTemplate(String modelName) {
+String _generateModelTestTemplate(String modelName, String fileName) {
   return '''import 'package:flutter_test/flutter_test.dart';
-import '../../lib/src/data/models/${_toSnakeCase(modelName)}.dart';
+import 'package:starter_kit/src/data/models/$fileName.dart';
 
 void main() {
   group('$modelName Tests', () {
-    test('should create $modelName from JSON', () {
+    test('should create from JSON', () {
       final json = {
         'id': '1',
-        'name': 'Test $modelName',
+        'name': 'Test',
         'createdAt': '2024-01-01T00:00:00Z',
         'updatedAt': '2024-01-01T00:00:00Z',
       };
@@ -608,15 +1283,13 @@ void main() {
       final model = $modelName.fromJson(json);
 
       expect(model.id, '1');
-      expect(model.name, 'Test $modelName');
-      expect(model.createdAt, DateTime.parse('2024-01-01T00:00:00Z'));
-      expect(model.updatedAt, DateTime.parse('2024-01-01T00:00:00Z'));
+      expect(model.name, 'Test');
     });
 
-    test('should convert $modelName to JSON', () {
+    test('should convert to JSON', () {
       final model = $modelName(
         id: '1',
-        name: 'Test $modelName',
+        name: 'Test',
         createdAt: DateTime.parse('2024-01-01T00:00:00Z'),
         updatedAt: DateTime.parse('2024-01-01T00:00:00Z'),
       );
@@ -624,662 +1297,16 @@ void main() {
       final json = model.toJson();
 
       expect(json['id'], '1');
-      expect(json['name'], 'Test $modelName');
-      expect(json['createdAt'], '2024-01-01T00:00:00Z');
-      expect(json['updatedAt'], '2024-01-01T00:00:00Z');
-    });
-
-    test('should create copy with updated values', () {
-      final model = $modelName(
-        id: '1',
-        name: 'Test $modelName',
-        createdAt: DateTime.parse('2024-01-01T00:00:00Z'),
-        updatedAt: DateTime.parse('2024-01-01T00:00:00Z'),
-      );
-
-      final updated = model.copyWith(name: 'Updated $modelName');
-
-      expect(updated.id, '1');
-      expect(updated.name, 'Updated $modelName');
-      expect(updated.createdAt, model.createdAt);
-      expect(updated.updatedAt, model.updatedAt);
-    });
-
-    test('should support equality comparison', () {
-      final model1 = $modelName(
-        id: '1',
-        name: 'Test $modelName',
-        createdAt: DateTime.parse('2024-01-01T00:00:00Z'),
-        updatedAt: DateTime.parse('2024-01-01T00:00:00Z'),
-      );
-
-      final model2 = $modelName(
-        id: '1',
-        name: 'Test $modelName',
-        createdAt: DateTime.parse('2024-01-01T00:00:00Z'),
-        updatedAt: DateTime.parse('2024-01-01T00:00:00Z'),
-      );
-
-      expect(model1, equals(model2));
+      expect(json['name'], 'Test');
     });
   });
 }
 ''';
 }
 
-String _generateExampleMainTemplate() {
-  return '''import 'package:flutter/material.dart';
-import 'package:starter_kit/starter_kit.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize dependency injection
-  await configureDependencies(environment: 'dev');
-  
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'StarterKit Example',
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
-      navigatorKey: NavigationUtils.navigatorKey,
-      home: const ExampleHomePage(),
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        DefaultMaterialLocalizations.delegate,
-        DefaultWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: AppLocalizations.supportedLocales,
-    );
-  }
-}
-
-class ExampleHomePage extends StatefulWidget {
-  const ExampleHomePage({super.key});
-
-  @override
-  State<ExampleHomePage> createState() => _ExampleHomePageState();
-}
-
-class _ExampleHomePageState extends State<ExampleHomePage> {
-  final _emailController = TextEditingController();
-  final _searchController = TextEditingController();
-  String? _selectedCountry;
-  bool _isLoading = false;
-
-  final List<String> _countries = ['USA', 'Canada', 'UK', 'Germany', 'France'];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('StarterKit Example'),
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.white,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header
-            Text(
-              'Welcome to StarterKit!',
-              style: AppTextStyles.h1,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              'A comprehensive Flutter boilerplate with clean architecture, beautiful UI components, and powerful utilities.',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 32),
-
-            // Buttons Section
-            _buildSection(
-              title: '🔘 Button Components',
-              children: [
-                PrimaryButton(
-                  text: 'Primary Button',
-                  icon: Icons.rocket_launch,
-                  onPressed: () => _showSnackBar('Primary button pressed!'),
-                  isLoading: _isLoading,
-                ),
-                const SizedBox(height: 12),
-                SecondaryButton(
-                  text: 'Secondary Button',
-                  icon: Icons.star,
-                  onPressed: () => _showSnackBar('Secondary button pressed!'),
-                ),
-                const SizedBox(height: 12),
-                OutlineButton(
-                  text: 'Outline Button',
-                  icon: Icons.favorite_border,
-                  onPressed: () => _showSnackBar('Outline button pressed!'),
-                ),
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: TextBtn(
-                        text: 'Text Button',
-                        icon: Icons.link,
-                        onPressed: () => _showSnackBar('Text button pressed!'),
-                      ),
-                    ),
-                    IconBtn(
-                      icon: Icons.settings,
-                      onPressed: () => _showSnackBar('Icon button pressed!'),
-                    ),
-                    IconBtn(
-                      icon: Icons.favorite,
-                      color: AppColors.error,
-                      onPressed: () => _showSnackBar('Heart button pressed!'),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                PrimaryButton(
-                  text: 'Toggle Loading',
-                  onPressed: () => setState(() => _isLoading = !_isLoading),
-                  fullWidth: true,
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Input Section
-            _buildSection(
-              title: '📝 Input Components',
-              children: [
-                AppTextField(
-                  controller: _emailController,
-                  labelText: 'Email Address',
-                  hintText: 'Enter your email',
-                  prefixIcon: Icons.email,
-                  keyboardType: TextInputType.emailAddress,
-                  onChanged: (value) {
-                    // Validate email as user types
-                    setState(() {});
-                  },
-                  errorText: _emailController.text.isNotEmpty && 
-                             !StringUtils.isEmail(_emailController.text)
-                      ? 'Please enter a valid email address'
-                      : null,
-                ),
-                const SizedBox(height: 16),
-                AppSearchField(
-                  controller: _searchController,
-                  hintText: 'Search anything...',
-                  onChanged: (value) => AppLogger.d('Searching: \$value'),
-                  onClear: () => AppLogger.d('Search cleared'),
-                ),
-                const SizedBox(height: 16),
-                AppDropdownField<String>(
-                  labelText: 'Country',
-                  value: _selectedCountry,
-                  hintText: 'Select your country',
-                  items: _countries.map((country) => 
-                    DropdownMenuItem(value: country, child: Text(country))
-                  ).toList(),
-                  onChanged: (value) => setState(() => _selectedCountry = value),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Cards Section
-            _buildSection(
-              title: '🃏 Card Components',
-              children: [
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Basic Card', style: AppTextStyles.h5),
-                      const SizedBox(height: 8),
-                      Text(
-                        'This is a basic card component with custom padding and styling.',
-                        style: AppTextStyles.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppListCard(
-                  title: 'John Doe',
-                  subtitle: 'Software Engineer at TechCorp',
-                  leading: const CircleAvatar(
-                    backgroundColor: AppColors.primary,
-                    child: Text('JD', style: TextStyle(color: AppColors.white)),
-                  ),
-                  trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                  onTap: () => _showSnackBar('Profile tapped!'),
-                ),
-                const SizedBox(height: 16),
-                AppInfoCard(
-                  title: 'System Information',
-                  icon: Icons.info,
-                  content: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _buildInfoRow('App Version', '1.0.0'),
-                      _buildInfoRow('Build Number', '1'),
-                      _buildInfoRow('Platform', 'Flutter'),
-                      _buildInfoRow('Environment', 'Development'),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppStatusCard.success(
-                  title: 'Connection Status',
-                  description: 'All systems are operational.',
-                  onTap: () => _showSnackBar('Status card tapped!'),
-                ),
-                const SizedBox(height: 12),
-                AppStatusCard.warning(
-                  title: 'Storage Warning',
-                  description: 'Your storage is 80% full. Consider cleaning up.',
-                ),
-                const SizedBox(height: 12),
-                AppStatusCard.error(
-                  title: 'Sync Error',
-                  description: 'Failed to sync data. Please try again.',
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Utilities Section
-            _buildSection(
-              title: '🛠️ Utility Functions',
-              children: [
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('String Utils Demo', style: AppTextStyles.h5),
-                      const SizedBox(height: 12),
-                      _buildUtilRow('capitalize("hello world")', 
-                                   StringUtils.capitalize('hello world')),
-                      _buildUtilRow('truncate("Very long text...", 10)', 
-                                   StringUtils.truncate('Very long text that needs truncation', 10)),
-                      _buildUtilRow('isEmail("test@example.com")', 
-                                   StringUtils.isEmail('test@example.com').toString()),
-                      _buildUtilRow('toCamelCase("hello world")', 
-                                   StringUtils.toCamelCase('hello world')),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Date Utils Demo', style: AppTextStyles.h5),
-                      const SizedBox(height: 12),
-                      _buildUtilRow('formatDate(now)', 
-                                   AppDateUtils.formatDate(DateTime.now())),
-                      _buildUtilRow('formatRelativeTime(1 hour ago)', 
-                                   AppDateUtils.formatRelativeTime(
-                                     DateTime.now().subtract(const Duration(hours: 1)))),
-                      _buildUtilRow('isToday(now)', 
-                                   AppDateUtils.isToday(DateTime.now()).toString()),
-                      _buildUtilRow('formatDuration(2h 30m)', 
-                                   AppDateUtils.formatDuration(
-                                     const Duration(hours: 2, minutes: 30))),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 16),
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Validators Demo', style: AppTextStyles.h5),
-                      const SizedBox(height: 12),
-                      _buildUtilRow('email("test@example.com")', 
-                                   Validators.email('test@example.com') ?? 'Valid ✅'),
-                      _buildUtilRow('email("invalid-email")', 
-                                   Validators.email('invalid-email') ?? 'Valid ✅'),
-                      _buildUtilRow('phone("+1234567890")', 
-                                   Validators.phone('+1234567890') ?? 'Valid ✅'),
-                      _buildUtilRow('phone("123")', 
-                                   Validators.phone('123') ?? 'Valid ✅'),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // API Demo Section
-            _buildSection(
-              title: '🌐 API Client Demo',
-              children: [
-                AppCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('API Configuration', style: AppTextStyles.h5),
-                      const SizedBox(height: 12),
-                      _buildInfoRow('Base URL', get<AppConfig>().apiBaseUrl),
-                      _buildInfoRow('Environment', get<AppConfig>().isDebug ? 'Debug' : 'Release'),
-                      _buildInfoRow('App Name', get<AppConfig>().appName),
-                      _buildInfoRow('Version', get<AppConfig>().appVersion),
-                      const SizedBox(height: 16),
-                      PrimaryButton(
-                        text: 'Test API Call',
-                        icon: Icons.cloud_sync,
-                        onPressed: _testApiCall,
-                        fullWidth: true,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Device Info Section
-            _buildSection(
-              title: '📱 Device Information',
-              children: [
-                AppCard(
-                  child: FutureBuilder<Map<String, String>>(
-                    future: _getDeviceInfo(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: CircularProgressIndicator(),
-                          ),
-                        );
-                      }
-
-                      final deviceInfo = snapshot.data ?? {};
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Device Details', style: AppTextStyles.h5),
-                          const SizedBox(height: 12),
-                          ...deviceInfo.entries.map((entry) => 
-                            _buildInfoRow(entry.key, entry.value)),
-                        ],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-
-            const SizedBox(height: 32),
-
-            // Footer
-            Center(
-              child: Column(
-                children: [
-                  Text(
-                    'Made with ❤️ using StarterKit',
-                    style: AppTextStyles.bodySmall.copyWith(
-                      color: AppColors.textTertiary,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextBtn(
-                    text: 'View Documentation',
-                    icon: Icons.book,
-                    onPressed: () => _showSnackBar('Documentation opened!'),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 32),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildSection({
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: AppTextStyles.h3),
-        const SizedBox(height: 16),
-        ...children,
-      ],
-    );
-  }
-
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              '\$label:',
-              style: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: AppTextStyles.bodyMedium,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildUtilRow(String input, String output) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            input,
-            style: AppTextStyles.bodySmall.copyWith(
-              color: AppColors.textSecondary,
-              fontFamily: 'monospace',
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            '→ \$output',
-            style: AppTextStyles.bodyMedium.copyWith(
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSnackBar(String message) {
-    NavigationUtils.showSnackBar(message: message);
-  }
-
-  Future<void> _testApiCall() async {
-    NavigationUtils.showLoadingDialog(message: 'Testing API...');
-    
-    try {
-      final apiClient = get<ApiClient>();
-      
-      // Simulate API call delay
-      await Future.delayed(const Duration(seconds: 2));
-      
-      // This will fail as we don't have a real API, but it demonstrates the usage
-      final response = await apiClient.get<Map<String, dynamic>>('/test');
-      
-      NavigationUtils.hideLoadingDialog();
-      
-      if (response.isSuccess) {
-        _showSnackBar('API call successful!');
-      } else {
-        _showSnackBar('API call failed: \${response.errorMessage}');
-      }
-    } catch (e) {
-      NavigationUtils.hideLoadingDialog();
-      _showSnackBar('API call failed: \$e');
-    }
-  }
-
-  Future<Map<String, String>> _getDeviceInfo() async {
-    try {
-      return {
-        'Device ID': await DeviceUtils.getDeviceId(),
-        'Device Name': await DeviceUtils.getDeviceName(),
-        'OS Version': await DeviceUtils.getOsVersion(),
-        'App Version': await DeviceUtils.getAppVersion(),
-        'Package Name': await DeviceUtils.getPackageName(),
-        'Device Type': await DeviceUtils.getDeviceType(),
-        'Is Mobile': DeviceUtils.isMobile().toString(),
-        'Is Desktop': DeviceUtils.isDesktop().toString(),
-        'Is Web': DeviceUtils.isWeb().toString(),
-      };
-    } catch (e) {
-      return {'Error': 'Failed to get device info: \$e'};
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _searchController.dispose();
-    super.dispose();
-  }
-}
-''';
-}
-
-String _generateExamplePubspecTemplate() {
-  return '''name: starter_kit_example
-description: Example app demonstrating StarterKit features
-version: 1.0.0+1
-publish_to: 'none'
-
-environment:
-  sdk: ^3.0.0
-  flutter: ">=3.0.0"
-
-dependencies:
-  flutter:
-    sdk: flutter
-  starter_kit:
-    path: ../
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^4.0.0
-
-flutter:
-  uses-material-design: true
-  assets:
-    - assets/icons/
-    - assets/images/
-''';
-}
-
-String _generateExampleReadmeTemplate() {
-  return '''# StarterKit Example
-
-This example demonstrates all the features of the StarterKit package.
-
-## Features Demonstrated
-
-### 🎨 UI Components
-- Primary, Secondary, Outline, Text, and Icon buttons
-- Text fields with validation
-- Search fields with clear functionality
-- Dropdown fields with selection
-- Various card types (Basic, List, Info, Status)
-
-### 🛠️ Utilities
-- String manipulation functions
-- Date formatting and calculations
-- Form validation
-- Device information
-- Navigation helpers
-
-### 🌐 Networking
-- API client configuration
-- Response handling
-- Error management
-
-### 🔧 Configuration
-- Environment-specific settings
-- Dependency injection
-- Logging
-
-## Running the Example
-
-1. Navigate to the example directory:
-   ```bash
-   cd example
-   ```
-
-2. Install dependencies:
-   ```bash
-   flutter pub get
-   ```
-
-3. Run the app:
-   ```bash
-   flutter run
-   ```
-
-## Code Structure
-
-```
-example/
-├── lib/
-│   └── main.dart          # Main example app
-├── pubspec.yaml           # Dependencies
-└── README.md             # This file
-```
-
-The example app showcases all StarterKit components and utilities in a single, comprehensive interface. Each section demonstrates different aspects of the package with interactive examples.
-''';
-}
-
+// Utility functions
 void _writeFile(String path, String content) {
   final file = File(path);
   file.createSync(recursive: true);
   file.writeAsStringSync(content);
-}
-
-String _toSnakeCase(String text) {
-  return text
-      .replaceAllMapped(RegExp(r'[A-Z]'), (match) => '_${match.group(0)}')
-      .toLowerCase()
-      .replaceAll(RegExp(r'^_'), '')
-      .replaceAll(RegExp(r'_{2,}'), '_');
 }

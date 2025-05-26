@@ -1,188 +1,84 @@
-/// Validation utilities for form fields
+/// Form validation utilities
 class Validators {
-  Validators._();
-
-  /// Validates if a string is a valid email
-  static String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email is required';
-    }
-
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
-    if (!emailRegExp.hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string is a valid email (alias for validateEmail)
+  /// Validate email
   static String? email(String? value) {
     if (value == null || value.isEmpty) {
       return 'Email is required';
     }
-
-    final emailRegExp = RegExp(r'^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+');
-    if (!emailRegExp.hasMatch(value)) {
-      return 'Please enter a valid email address';
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+      return 'Enter a valid email address';
     }
-
     return null;
   }
-
-  /// Validates if a string is not empty
-  static String? validateRequired(String? value, {String? fieldName}) {
-    if (value == null || value.isEmpty) {
-      return '${fieldName ?? 'This field'} is required';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string is a valid password
-  static String? validatePassword(String? value, {int minLength = 8}) {
+  
+  /// Validate password
+  static String? password(String? value) {
     if (value == null || value.isEmpty) {
       return 'Password is required';
     }
-
-    if (value.length < minLength) {
-      return 'Password must be at least $minLength characters';
+    if (value.length < 8) {
+      return 'Password must be at least 8 characters';
     }
-
+    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)').hasMatch(value)) {
+      return 'Password must contain uppercase, lowercase, and number';
+    }
     return null;
   }
-
-  /// Validates if a string matches another string
-  static String? validateMatch(
-    String? value,
-    String? matchValue, {
-    String? fieldName,
-  }) {
-    if (value != matchValue) {
-      return '${fieldName ?? 'Fields'} do not match';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string is a valid phone number
-  static String? validatePhone(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Phone number is required';
-    }
-
-    final phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
-    if (!phoneRegExp.hasMatch(value)) {
-      return 'Please enter a valid phone number';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string is a valid phone number (alias for validatePhone)
+  
+  /// Validate phone number
   static String? phone(String? value) {
     if (value == null || value.isEmpty) {
       return 'Phone number is required';
     }
-
-    final phoneRegExp = RegExp(r'^\+?[0-9]{10,15}$');
-    if (!phoneRegExp.hasMatch(value)) {
-      return 'Please enter a valid phone number';
+    if (!RegExp(r'^[\+]?[1-9]?[0-9]{7,15}$').hasMatch(value)) {
+      return 'Enter a valid phone number';
     }
-
     return null;
   }
-
-  /// Validates if a string is a valid URL
-  static String? validateUrl(String? value) {
+  
+  /// Validate required field
+  static String? required(String? value, {String fieldName = 'This field'}) {
+    if (value == null || value.trim().isEmpty) {
+      return '$fieldName is required';
+    }
+    return null;
+  }
+  
+  /// Validate minimum length
+  static String? minLength(String? value, int minLength, {String fieldName = 'This field'}) {
+    if (value == null || value.length < minLength) {
+      return '$fieldName must be at least $minLength characters';
+    }
+    return null;
+  }
+  
+  /// Validate maximum length
+  static String? maxLength(String? value, int maxLength, {String fieldName = 'This field'}) {
+    if (value != null && value.length > maxLength) {
+      return '$fieldName must not exceed $maxLength characters';
+    }
+    return null;
+  }
+  
+  /// Validate URL
+  static String? url(String? value) {
     if (value == null || value.isEmpty) {
       return 'URL is required';
     }
-
-    final urlRegExp = RegExp(
-      r'^(http|https)://'
-      r'([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,6}'
-      r'(/[\w\-.,@?^=%&:/~+#]*)*$',
-    );
-
-    if (!urlRegExp.hasMatch(value)) {
-      return 'Please enter a valid URL';
+    if (!RegExp(r'^https?:\/\/.+').hasMatch(value)) {
+      return 'Enter a valid URL';
     }
-
     return null;
   }
-
-  /// Validates if a number is within a range
-  static String? validateRange(
-    num? value, {
-    num? min,
-    num? max,
-    String? fieldName,
-  }) {
-    if (value == null) {
-      return '${fieldName ?? 'This field'} is required';
-    }
-
-    if (min != null && value < min) {
-      return '${fieldName ?? 'Value'} must be at least $min';
-    }
-
-    if (max != null && value > max) {
-      return '${fieldName ?? 'Value'} must be at most $max';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string has a minimum length
-  static String? validateMinLength(
-    String? value,
-    int minLength, {
-    String? fieldName,
-  }) {
+  
+  /// Validate numeric value
+  static String? numeric(String? value, {String fieldName = 'This field'}) {
     if (value == null || value.isEmpty) {
-      return '${fieldName ?? 'This field'} is required';
+      return '$fieldName is required';
     }
-
-    if (value.length < minLength) {
-      return '${fieldName ?? 'This field'} must be at least $minLength characters';
+    if (double.tryParse(value) == null) {
+      return '$fieldName must be a number';
     }
-
-    return null;
-  }
-
-  /// Validates if a string has a maximum length
-  static String? validateMaxLength(
-    String? value,
-    int maxLength, {
-    String? fieldName,
-  }) {
-    if (value == null || value.isEmpty) {
-      return '${fieldName ?? 'This field'} is required';
-    }
-
-    if (value.length > maxLength) {
-      return '${fieldName ?? 'This field'} must be at most $maxLength characters';
-    }
-
-    return null;
-  }
-
-  /// Validates if a string matches a pattern
-  static String? validatePattern(
-    String? value,
-    RegExp pattern, {
-    String? errorMessage,
-    String? fieldName,
-  }) {
-    if (value == null || value.isEmpty) {
-      return '${fieldName ?? 'This field'} is required';
-    }
-
-    if (!pattern.hasMatch(value)) {
-      return errorMessage ?? '${fieldName ?? 'This field'} is invalid';
-    }
-
     return null;
   }
 }

@@ -1,196 +1,136 @@
 import 'package:flutter/material.dart';
 
-/// Navigation utility functions for the application
+/// Navigation utilities for common navigation tasks
 class NavigationUtils {
-  NavigationUtils._();
-
-  /// Global navigation key
-  static final GlobalKey<NavigatorState> navigatorKey =
-      GlobalKey<NavigatorState>();
-
-  /// Get the current context
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  
+  /// Get current context
   static BuildContext? get currentContext => navigatorKey.currentContext;
-
-  /// Push a new route onto the navigation stack
-  static Future<T?> push<T>(
-    Widget page, {
-    bool fullscreenDialog = false,
-  }) async {
-    return await navigatorKey.currentState?.push<T>(
-      MaterialPageRoute(
-        builder: (context) => page,
-        fullscreenDialog: fullscreenDialog,
-      ),
-    );
+  
+  /// Get current navigator state
+  static NavigatorState? get navigator => navigatorKey.currentState;
+  
+  /// Push new route
+  static Future<T?> push<T extends Object?>(Widget page) {
+    return navigator?.push<T>(
+      MaterialPageRoute(builder: (_) => page),
+    ) ?? Future.value(null);
   }
-
-  /// Push a named route onto the navigation stack
-  static Future<T?> pushNamed<T>(String routeName, {Object? arguments}) async {
-    return await navigatorKey.currentState?.pushNamed<T>(
-      routeName,
-      arguments: arguments,
-    );
+  
+  /// Push named route
+  static Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments}) {
+    return navigator?.pushNamed<T>(routeName, arguments: arguments) ?? Future.value(null);
   }
-
-  /// Replace the current route with a new one
-  static Future<T?> pushReplacement<T, TO>(
-    Widget page, {
-    bool fullscreenDialog = false,
-  }) async {
-    return await navigatorKey.currentState?.pushReplacement<T, TO>(
-      MaterialPageRoute(
-        builder: (context) => page,
-        fullscreenDialog: fullscreenDialog,
-      ),
-    );
+  
+  /// Replace current route
+  static Future<T?> pushReplacement<T extends Object?, TO extends Object?>(Widget page, {TO? result}) {
+    return navigator?.pushReplacement<T, TO>(
+      MaterialPageRoute(builder: (_) => page),
+      result: result,
+    ) ?? Future.value(null);
   }
-
-  /// Replace the current named route with a new one
-  static Future<T?> pushReplacementNamed<T, TO>(
-    String routeName, {
-    Object? arguments,
-  }) async {
-    return await navigatorKey.currentState?.pushReplacementNamed<T, TO>(
-      routeName,
-      arguments: arguments,
-    );
-  }
-
-  /// Push a new route and remove all previous routes
-  static Future<T?> pushAndRemoveUntil<T>(
-    Widget page, {
-    bool fullscreenDialog = false,
-  }) async {
-    return await navigatorKey.currentState?.pushAndRemoveUntil<T>(
-      MaterialPageRoute(
-        builder: (context) => page,
-        fullscreenDialog: fullscreenDialog,
-      ),
+  
+  /// Push and clear stack
+  static Future<T?> pushAndClearStack<T extends Object?>(Widget page) {
+    return navigator?.pushAndRemoveUntil<T>(
+      MaterialPageRoute(builder: (_) => page),
       (route) => false,
-    );
+    ) ?? Future.value(null);
   }
-
-  /// Push a named route and remove all previous routes
-  static Future<T?> pushNamedAndRemoveUntil<T>(
-    String routeName, {
-    Object? arguments,
-  }) async {
-    return await navigatorKey.currentState?.pushNamedAndRemoveUntil<T>(
-      routeName,
-      (route) => false,
-      arguments: arguments,
-    );
+  
+  /// Pop current route
+  static void pop<T extends Object?>([T? result]) {
+    if (navigator?.canPop() == true) {
+      navigator?.pop<T>(result);
+    }
   }
-
-  /// Pop the current route
-  static void pop<T>([T? result]) {
-    navigatorKey.currentState?.pop<T>(result);
-  }
-
-  /// Pop until a specific route
+  
+  /// Pop until route
   static void popUntil(String routeName) {
-    navigatorKey.currentState?.popUntil(ModalRoute.withName(routeName));
+    navigator?.popUntil(ModalRoute.withName(routeName));
   }
-
-  /// Check if we can pop the current route
-  static bool canPop() {
-    return navigatorKey.currentState?.canPop() ?? false;
-  }
-
-  /// Pop the current route if possible
-  static void maybePop<T>([T? result]) {
-    navigatorKey.currentState?.maybePop<T>(result);
-  }
-
-  /// Show a dialog
-  static Future<T?> showAppDialog<T>({
-    required Widget dialog,
-    bool barrierDismissible = true,
-  }) async {
-    return await showDialog<T>(
-      context: navigatorKey.currentContext!,
-      barrierDismissible: barrierDismissible,
-      builder: (context) => dialog,
-    );
-  }
-
-  /// Show a modal bottom sheet
-  static Future<T?> showAppBottomSheet<T>({
-    required Widget child,
-    bool isScrollControlled = false,
-    Color? backgroundColor,
-    double? elevation,
-    ShapeBorder? shape,
-    Clip? clipBehavior,
-    Color? barrierColor,
-    bool isDismissible = true,
-    bool enableDrag = true,
-  }) async {
-    return await showModalBottomSheet<T>(
-      context: navigatorKey.currentContext!,
-      isScrollControlled: isScrollControlled,
-      backgroundColor: backgroundColor,
-      elevation: elevation,
-      shape: shape,
-      clipBehavior: clipBehavior,
-      barrierColor: barrierColor,
-      isDismissible: isDismissible,
-      enableDrag: enableDrag,
-      builder: (context) => child,
-    );
-  }
-
-  /// Show a snackbar
+  
+  /// Show snack bar
   static void showSnackBar({
     required String message,
-    Duration duration = const Duration(seconds: 2),
-    Color? backgroundColor,
-    Color? textColor,
     SnackBarAction? action,
+    Duration duration = const Duration(seconds: 3),
   }) {
-    final scaffoldMessenger = ScaffoldMessenger.of(
-      navigatorKey.currentContext!,
-    );
-    scaffoldMessenger.hideCurrentSnackBar();
-    scaffoldMessenger.showSnackBar(
-      SnackBar(
-        content: Text(message, style: TextStyle(color: textColor)),
-        duration: duration,
-        backgroundColor: backgroundColor,
-        action: action,
+    final context = currentContext;
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          action: action,
+          duration: duration,
+        ),
+      );
+    }
+  }
+  
+  /// Show dialog
+  static Future<T?> showAlertDialog<T>({
+    required String title,
+    required String content,
+    String confirmText = 'OK',
+    String? cancelText,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    final context = currentContext;
+    if (context == null) return Future.value(null);
+    
+    return showDialog<T>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          if (cancelText != null)
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onCancel?.call();
+              },
+              child: Text(cancelText),
+            ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm?.call();
+            },
+            child: Text(confirmText),
+          ),
+        ],
       ),
     );
   }
-
-  /// Show a loading dialog
-  static void showLoadingDialog({String? message}) {
-    showAppDialog(
-      dialog: PopScope(
-        canPop: false,
-        child: Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const CircularProgressIndicator(),
-                if (message != null) ...[
-                  const SizedBox(height: 16.0),
-                  Text(message),
-                ],
-              ],
-            ),
+  
+  /// Show loading dialog
+  static void showLoadingDialog({String message = 'Loading...'}) {
+    final context = currentContext;
+    if (context != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 16),
+              Text(message),
+            ],
           ),
         ),
-      ),
-      barrierDismissible: false,
-    );
+      );
+    }
   }
-
-  /// Hide the loading dialog
+  
+  /// Hide loading dialog
   static void hideLoadingDialog() {
-    if (navigatorKey.currentState?.canPop() ?? false) {
-      navigatorKey.currentState?.pop();
+    final context = currentContext;
+    if (context != null && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
     }
   }
 }

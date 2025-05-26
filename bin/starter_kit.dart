@@ -552,6 +552,238 @@ class AppTheme {
 ''';
   _writeFile('lib/src/core/design_system/theme/theme.dart', themeContent);
 
+  // Generate button components
+  final buttonsContent = '''import 'package:flutter/material.dart';
+import '../theme/colors.dart';
+import '../theme/typography.dart';
+
+/// Primary action button
+class PrimaryButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool isLoading;
+  final bool fullWidth;
+  final EdgeInsetsGeometry? padding;
+
+  const PrimaryButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.icon,
+    this.isLoading = false,
+    this.fullWidth = false,
+    this.padding,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget button = ElevatedButton(
+      onPressed: isLoading ? null : onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        padding: padding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: isLoading
+          ? const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation(AppColors.white),
+              ),
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (icon != null) ...[
+                  Icon(icon, size: 16),
+                  const SizedBox(width: 8),
+                ],
+                Text(text, style: AppTextStyles.button),
+              ],
+            ),
+    );
+
+    return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
+  }
+}
+
+/// Secondary action button
+class SecondaryButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  final IconData? icon;
+  final bool fullWidth;
+
+  const SecondaryButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+    this.icon,
+    this.fullWidth = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    Widget button = ElevatedButton(
+      onPressed: onPressed,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: AppColors.secondary,
+        foregroundColor: AppColors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (icon != null) ...[
+            Icon(icon, size: 16),
+            const SizedBox(width: 8),
+          ],
+          Text(text, style: AppTextStyles.button),
+        ],
+      ),
+    );
+
+    return fullWidth ? SizedBox(width: double.infinity, child: button) : button;
+  }
+}
+''';
+  _writeFile(
+    'lib/src/core/design_system/components/buttons.dart',
+    buttonsContent,
+  );
+
+  // Generate input components
+  final inputsContent = '''import 'package:flutter/material.dart';
+import '../theme/colors.dart';
+import '../theme/typography.dart';
+
+/// Custom text field
+class AppTextField extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? labelText;
+  final String? hintText;
+  final String? errorText;
+  final IconData? prefixIcon;
+  final IconData? suffixIcon;
+  final VoidCallback? onSuffixTap;
+  final ValueChanged<String>? onChanged;
+  final VoidCallback? onTap;
+  final TextInputType? keyboardType;
+  final bool obscureText;
+  final bool readOnly;
+  final bool enabled;
+  final int? maxLines;
+  final String? Function(String?)? validator;
+
+  const AppTextField({
+    super.key,
+    this.controller,
+    this.labelText,
+    this.hintText,
+    this.errorText,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.onSuffixTap,
+    this.onChanged,
+    this.onTap,
+    this.keyboardType,
+    this.obscureText = false,
+    this.readOnly = false,
+    this.enabled = true,
+    this.maxLines = 1,
+    this.validator,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      controller: controller,
+      onChanged: onChanged,
+      onTap: onTap,
+      keyboardType: keyboardType,
+      obscureText: obscureText,
+      readOnly: readOnly,
+      enabled: enabled,
+      maxLines: maxLines,
+      validator: validator,
+      style: AppTextStyles.bodyMedium,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: hintText,
+        errorText: errorText,
+        prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: AppColors.textSecondary) : null,
+        suffixIcon: suffixIcon != null
+            ? GestureDetector(
+                onTap: onSuffixTap,
+                child: Icon(suffixIcon, color: AppColors.textSecondary),
+              )
+            : null,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.border),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.primary, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.error),
+        ),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      ),
+    );
+  }
+}
+''';
+  _writeFile(
+    'lib/src/core/design_system/components/inputs.dart',
+    inputsContent,
+  );
+
+  // Generate card components
+  final cardsContent = '''import 'package:flutter/material.dart';
+import '../theme/colors.dart';
+import '../theme/typography.dart';
+
+/// Basic card component
+class AppCard extends StatelessWidget {
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+  final VoidCallback? onTap;
+
+  const AppCard({
+    super.key,
+    required this.child,
+    this.padding,
+    this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: AppColors.surface,
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: padding ?? const EdgeInsets.all(16),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
+''';
+  _writeFile('lib/src/core/design_system/components/cards.dart', cardsContent);
+
   // Update design system exports
   final designSystemContent = '''// Design System Exports
 export 'theme/colors.dart';
@@ -669,6 +901,60 @@ class ApiClient {
 }
 ''';
   _writeFile('lib/src/core/network/api_client.dart', apiClientContent);
+
+  // Generate API Response model
+  final apiResponseContent = '''/// Generic API response wrapper
+class ApiResponse<T> {
+  final T? data;
+  final String? errorMessage;
+  final bool isSuccess;
+  
+  const ApiResponse._({
+    this.data,
+    this.errorMessage,
+    required this.isSuccess,
+  });
+  
+  /// Create successful response
+  factory ApiResponse.success(T data) {
+    return ApiResponse._(data: data, isSuccess: true);
+  }
+  
+  /// Create error response
+  factory ApiResponse.error(String message) {
+    return ApiResponse._(errorMessage: message, isSuccess: false);
+  }
+  
+  /// Check if response has data
+  bool get hasData => data != null;
+  
+  /// Check if response has error
+  bool get hasError => errorMessage != null;
+  
+  /// Create copy with different values
+  ApiResponse<T> copyWith({
+    T? data,
+    String? errorMessage,
+    bool? isSuccess,
+  }) {
+    return ApiResponse._(
+      data: data ?? this.data,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isSuccess: isSuccess ?? this.isSuccess,
+    );
+  }
+  
+  @override
+  String toString() {
+    if (isSuccess) {
+      return 'ApiResponse.success(data: \$data)';
+    } else {
+      return 'ApiResponse.error(message: \$errorMessage)';
+    }
+  }
+}
+''';
+  _writeFile('lib/src/data/models/api_response.dart', apiResponseContent);
 
   stdout.writeln('  ✅ Network Layer (API Client, Response Model)');
 }
@@ -908,6 +1194,392 @@ export 'device_utils.dart';
 ''';
   _writeFile('lib/src/core/utils/utils.dart', utilsContent);
 
+  // Navigation utilities
+  final navigationUtilsContent = '''import 'package:flutter/material.dart';
+
+/// Navigation utilities for common navigation tasks
+class NavigationUtils {
+  static final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+  
+  /// Get current context
+  static BuildContext? get currentContext => navigatorKey.currentContext;
+  
+  /// Get current navigator state
+  static NavigatorState? get navigator => navigatorKey.currentState;
+  
+  /// Push new route
+  static Future<T?> push<T extends Object?>(Widget page) {
+    return navigator?.push<T>(
+      MaterialPageRoute(builder: (_) => page),
+    ) ?? Future.value(null);
+  }
+  
+  /// Push named route
+  static Future<T?> pushNamed<T extends Object?>(String routeName, {Object? arguments}) {
+    return navigator?.pushNamed<T>(routeName, arguments: arguments) ?? Future.value(null);
+  }
+  
+  /// Replace current route
+  static Future<T?> pushReplacement<T extends Object?, TO extends Object?>(Widget page, {TO? result}) {
+    return navigator?.pushReplacement<T, TO>(
+      MaterialPageRoute(builder: (_) => page),
+      result: result,
+    ) ?? Future.value(null);
+  }
+  
+  /// Push and clear stack
+  static Future<T?> pushAndClearStack<T extends Object?>(Widget page) {
+    return navigator?.pushAndRemoveUntil<T>(
+      MaterialPageRoute(builder: (_) => page),
+      (route) => false,
+    ) ?? Future.value(null);
+  }
+  
+  /// Pop current route
+  static void pop<T extends Object?>([T? result]) {
+    if (navigator?.canPop() == true) {
+      navigator?.pop<T>(result);
+    }
+  }
+  
+  /// Pop until route
+  static void popUntil(String routeName) {
+    navigator?.popUntil(ModalRoute.withName(routeName));
+  }
+  
+  /// Show snack bar
+  static void showSnackBar({
+    required String message,
+    SnackBarAction? action,
+    Duration duration = const Duration(seconds: 3),
+  }) {
+    final context = currentContext;
+    if (context != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          action: action,
+          duration: duration,
+        ),
+      );
+    }
+  }
+  
+  /// Show dialog
+  static Future<T?> showAlertDialog<T>({
+    required String title,
+    required String content,
+    String confirmText = 'OK',
+    String? cancelText,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    final context = currentContext;
+    if (context == null) return Future.value(null);
+    
+    return showDialog<T>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: [
+          if (cancelText != null)
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onCancel?.call();
+              },
+              child: Text(cancelText),
+            ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm?.call();
+            },
+            child: Text(confirmText),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  /// Show loading dialog
+  static void showLoadingDialog({String message = 'Loading...'}) {
+    final context = currentContext;
+    if (context != null) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) => AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 16),
+              Text(message),
+            ],
+          ),
+        ),
+      );
+    }
+  }
+  
+  /// Hide loading dialog
+  static void hideLoadingDialog() {
+    final context = currentContext;
+    if (context != null && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+  }
+}
+''';
+  _writeFile(
+    'lib/src/core/utils/navigation_utils.dart',
+    navigationUtilsContent,
+  );
+
+  // Logger utilities
+  final loggerContent = '''import 'package:flutter/foundation.dart';
+
+/// Logging utilities for development and debugging
+class AppLogger {
+  static const String _prefix = '[StarterKit]';
+  
+  /// Log debug message
+  static void d(String message, [String? tag]) {
+    if (kDebugMode) {
+      final logMessage = tag != null ? '\$_prefix [\$tag] \$message' : '\$_prefix \$message';
+      debugPrint(logMessage);
+    }
+  }
+  
+  /// Log info message  
+  static void i(String message, [String? tag]) {
+    if (kDebugMode) {
+      final logMessage = tag != null ? '\$_prefix [INFO] [\$tag] \$message' : '\$_prefix [INFO] \$message';
+      debugPrint(logMessage);
+    }
+  }
+  
+  /// Log warning message
+  static void w(String message, [String? tag]) {
+    if (kDebugMode) {
+      final logMessage = tag != null ? '\$_prefix [WARNING] [\$tag] \$message' : '\$_prefix [WARNING] \$message';
+      debugPrint(logMessage);
+    }
+  }
+  
+  /// Log error message
+  static void e(String message, [String? tag, Object? error, StackTrace? stackTrace]) {
+    if (kDebugMode) {
+      final logMessage = tag != null ? '\$_prefix [ERROR] [\$tag] \$message' : '\$_prefix [ERROR] \$message';
+      debugPrint(logMessage);
+      
+      if (error != null) {
+        debugPrint('\$_prefix [ERROR] Exception: \$error');
+      }
+      
+      if (stackTrace != null) {
+        debugPrint('\$_prefix [ERROR] Stack trace: \$stackTrace');
+      }
+    }
+  }
+  
+  /// Log network request
+  static void network(String method, String url, {Map<String, dynamic>? data}) {
+    if (kDebugMode) {
+      debugPrint('\$_prefix [NETWORK] \$method \$url');
+      if (data != null) {
+        debugPrint('\$_prefix [NETWORK] Data: \$data');
+      }
+    }
+  }
+  
+  /// Log performance timing
+  static void performance(String operation, Duration duration) {
+    if (kDebugMode) {
+      debugPrint('\$_prefix [PERFORMANCE] \$operation took \${duration.inMilliseconds}ms');
+    }
+  }
+  
+  /// Trace method execution
+  static void trace(String methodName, [String? className]) {
+    if (kDebugMode) {
+      final message = className != null ? '\$className.\$methodName' : methodName;
+      debugPrint('\$_prefix [TRACE] \$message');
+    }
+  }
+}
+''';
+  _writeFile('lib/src/core/utils/logger.dart', loggerContent);
+
+  // Device utilities
+  final deviceUtilsContent = '''import 'dart:io';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+/// Device information and platform utilities
+class DeviceUtils {
+  /// Get device unique identifier
+  static Future<String> getDeviceId() async {
+    if (kIsWeb) {
+      return 'web-device';
+    }
+    
+    try {
+      // In a real app, you'd use device_info_plus package
+      if (Platform.isIOS) {
+        return 'ios-device-\${DateTime.now().millisecondsSinceEpoch}';
+      } else if (Platform.isAndroid) {
+        return 'android-device-\${DateTime.now().millisecondsSinceEpoch}';
+      } else {
+        return 'unknown-device-\${DateTime.now().millisecondsSinceEpoch}';
+      }
+    } catch (e) {
+      return 'unknown-device';
+    }
+  }
+  
+  /// Get device name
+  static Future<String> getDeviceName() async {
+    if (kIsWeb) {
+      return 'Web Browser';
+    }
+    
+    try {
+      if (Platform.isIOS) {
+        return 'iPhone';
+      } else if (Platform.isAndroid) {
+        return 'Android Device';
+      } else if (Platform.isMacOS) {
+        return 'Mac';
+      } else if (Platform.isWindows) {
+        return 'Windows PC';
+      } else if (Platform.isLinux) {
+        return 'Linux PC';
+      } else {
+        return 'Unknown Device';
+      }
+    } catch (e) {
+      return 'Unknown Device';
+    }
+  }
+  
+  /// Get OS version
+  static Future<String> getOsVersion() async {
+    if (kIsWeb) {
+      return 'Web';
+    }
+    
+    try {
+      return Platform.operatingSystemVersion;
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
+  
+  /// Get app version
+  static Future<String> getAppVersion() async {
+    try {
+      // In a real app, you'd use package_info_plus
+      return '1.0.0';
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
+  
+  /// Get package name
+  static Future<String> getPackageName() async {
+    try {
+      // In a real app, you'd use package_info_plus
+      return 'com.example.app';
+    } catch (e) {
+      return 'Unknown';
+    }
+  }
+  
+  /// Get device type
+  static Future<String> getDeviceType() async {
+    if (kIsWeb) {
+      return 'web';
+    }
+    
+    try {
+      if (Platform.isIOS || Platform.isAndroid) {
+        return 'mobile';
+      } else if (Platform.isMacOS || Platform.isWindows || Platform.isLinux) {
+        return 'desktop';
+      } else {
+        return 'unknown';
+      }
+    } catch (e) {
+      return 'unknown';
+    }
+  }
+  
+  /// Check if device is mobile
+  static bool isMobile() {
+    if (kIsWeb) return false;
+    return Platform.isIOS || Platform.isAndroid;
+  }
+  
+  /// Check if device is desktop
+  static bool isDesktop() {
+    if (kIsWeb) return false;
+    return Platform.isMacOS || Platform.isWindows || Platform.isLinux;
+  }
+  
+  /// Check if running on web
+  static bool isWeb() {
+    return kIsWeb;
+  }
+  
+  /// Check if device is iOS
+  static bool isIOS() {
+    if (kIsWeb) return false;
+    return Platform.isIOS;
+  }
+  
+  /// Check if device is Android
+  static bool isAndroid() {
+    if (kIsWeb) return false;
+    return Platform.isAndroid;
+  }
+  
+  /// Vibrate device (if supported)
+  static Future<void> vibrate() async {
+    try {
+      await HapticFeedback.mediumImpact();
+    } catch (e) {
+      // Vibration not supported
+    }
+  }
+  
+  /// Hide keyboard
+  static void hideKeyboard(BuildContext context) {
+    FocusScope.of(context).unfocus();
+  }
+  
+  /// Check if keyboard is visible
+  static bool isKeyboardVisible(BuildContext context) {
+    return MediaQuery.of(context).viewInsets.bottom > 0;
+  }
+  
+  /// Get screen size
+  static Size getScreenSize(BuildContext context) {
+    return MediaQuery.of(context).size;
+  }
+  
+  /// Check if device is tablet
+  static bool isTablet(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final diagonal = (size.width * size.width + size.height * size.height);
+    return diagonal > 1100000; // Rough tablet detection
+  }
+}
+''';
+  _writeFile('lib/src/core/utils/device_utils.dart', deviceUtilsContent);
+
   stdout.writeln('  ✅ Utilities (String, Date, Validators)');
 }
 
@@ -1080,23 +1752,29 @@ export 'src/data/models/api_response.dart';
 
 // Template generation methods (simplified versions)
 String _generateScreenTemplate(String screenName) {
+  // Remove "Screen" from the end if it exists to avoid duplication
+  final cleanScreenName =
+      screenName.endsWith('Screen')
+          ? screenName.substring(0, screenName.length - 6)
+          : screenName;
+
   return '''import 'package:flutter/material.dart';
 import 'package:starter_kit/starter_kit.dart';
 
-class ${screenName}Screen extends StatefulWidget {
-  const ${screenName}Screen({super.key});
+class ${cleanScreenName}Screen extends StatefulWidget {
+  const ${cleanScreenName}Screen({super.key});
 
   @override
-  State<${screenName}Screen> createState() => _${screenName}ScreenState();
+  State<${cleanScreenName}Screen> createState() => _${cleanScreenName}ScreenState();
 }
 
-class _${screenName}ScreenState extends State<${screenName}Screen> {
+class _${cleanScreenName}ScreenState extends State<${cleanScreenName}Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('$screenName')),
-      body: const Center(
-        child: Text('$screenName Screen'),
+      appBar: AppBar(title: Text('$cleanScreenName')),
+      body: Center(
+        child: Text('$cleanScreenName Screen'),
       ),
     );
   }
@@ -1105,18 +1783,24 @@ class _${screenName}ScreenState extends State<${screenName}Screen> {
 }
 
 String _generateScreenTestTemplate(String screenName, String fileName) {
+  // Remove "Screen" from the end if it exists to avoid duplication
+  final cleanScreenName =
+      screenName.endsWith('Screen')
+          ? screenName.substring(0, screenName.length - 6)
+          : screenName;
+
   return '''import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:starter_kit/src/presentation/pages/${fileName}_screen.dart';
 
 void main() {
-  group('${screenName}Screen Tests', () {
+  group('${cleanScreenName}Screen Tests', () {
     testWidgets('should display screen', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(home: ${screenName}Screen()),
+        MaterialApp(home: ${cleanScreenName}Screen()),
       );
       
-      expect(find.text('$screenName Screen'), findsOneWidget);
+      expect(find.text('$cleanScreenName Screen'), findsOneWidget);
     });
   });
 }

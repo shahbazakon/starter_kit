@@ -1,8 +1,7 @@
-// StarterKit - A comprehensive Flutter boilerplate generator.
+// StarterKit - Flutter Boilerplate Generator
 //
-// This package provides a clean architecture structure with pre-integrated essential
-// Flutter packages, a WeChat-inspired design system, and CLI tools to automate
-// the generation of screens, APIs, localization, and more.
+// Complete boilerplate with clean architecture, design system,
+// and essential utilities for rapid Flutter development.
 
 // Core exports
 export 'src/core/config/app_config.dart';
@@ -15,5 +14,4 @@ export 'src/core/utils/utils.dart';
 // Data layer exports
 export 'src/data/models/api_response.dart';
 
-// Domain layer exports
-export 'src/domain/entities/failure.dart';
+// Domain layer exports (add as needed)

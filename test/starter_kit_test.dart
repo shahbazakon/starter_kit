@@ -28,7 +28,7 @@ void main() {
     group('DateUtils', () {
       test('should format date correctly', () {
         final date = DateTime(2023, 12, 25);
-        expect(AppDateUtils.formatDate(date), '2023-12-25');
+        expect(AppDateUtils.formatDate(date), 'Dec 25, 2023');
       });
 
       test('should check if date is today', () {
@@ -43,45 +43,34 @@ void main() {
     group('Validators', () {
       test('should validate email correctly', () {
         expect(Validators.email('test@example.com'), isNull);
-        expect(
-          Validators.email('invalid'),
-          'Please enter a valid email address',
-        );
+        expect(Validators.email('invalid'), 'Enter a valid email address');
         expect(Validators.email(''), 'Email is required');
       });
 
       test('should validate phone correctly', () {
         expect(Validators.phone('+1234567890'), isNull);
-        expect(Validators.phone('123'), 'Please enter a valid phone number');
+        expect(Validators.phone('123'), 'Enter a valid phone number');
         expect(Validators.phone(''), 'Phone number is required');
       });
     });
 
     group('ApiResponse', () {
       test('should create success response correctly', () {
-        final response = ApiResponse<String>.success(
-          data: 'test',
-          message: 'Success',
-        );
+        final response = ApiResponse<String>.success('test');
 
-        expect(response.success, true);
-        expect(response.data, 'test');
-        expect(response.message, 'Success');
         expect(response.isSuccess, true);
+        expect(response.data, 'test');
+        expect(response.hasData, true);
+        expect(response.hasError, false);
       });
 
       test('should create error response correctly', () {
-        final response = ApiResponse<String>.error(
-          message: 'Error occurred',
-          code: 400,
-          errors: ['Validation failed'],
-        );
+        final response = ApiResponse<String>.error('Error occurred');
 
-        expect(response.success, false);
-        expect(response.message, 'Error occurred');
-        expect(response.code, 400);
-        expect(response.errors, ['Validation failed']);
         expect(response.isSuccess, false);
+        expect(response.errorMessage, 'Error occurred');
+        expect(response.hasData, false);
+        expect(response.hasError, true);
       });
     });
   });

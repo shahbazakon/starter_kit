@@ -1,128 +1,50 @@
-/// Generic API response model that can be used to parse any API response
-/// [T] is the type of data expected in the response
+/// Generic API response wrapper
 class ApiResponse<T> {
-  /// Status of the response (success or error)
-  final bool success;
-
-  /// Optional message from the server
-  final String? message;
-
-  /// Optional error code from the server
-  final int? code;
-
-  /// The actual data returned by the API
   final T? data;
-
-  /// If there are any errors in the response
-  final List<String>? errors;
-
-  /// Constructor for ApiResponse
-  const ApiResponse({
-    required this.success,
-    this.message,
-    this.code,
+  final String? errorMessage;
+  final bool isSuccess;
+  
+  const ApiResponse._({
     this.data,
-    this.errors,
+    this.errorMessage,
+    required this.isSuccess,
   });
-
-  /// Factory constructor for creating a new ApiResponse from JSON
-  factory ApiResponse.fromJson(
-    Map<String, dynamic> json, {
-    T Function(Object?)? fromJsonT,
-  }) {
-    return ApiResponse<T>(
-      success: json['success'] as bool? ?? true,
-      message: json['message'] as String?,
-      code: json['code'] as int?,
-      data:
-          fromJsonT != null && json['data'] != null
-              ? fromJsonT(json['data'])
-              : json['data'] as T?,
-      errors:
-          json['errors'] != null
-              ? (json['errors'] as List).map((e) => e.toString()).toList()
-              : null,
-    );
+  
+  /// Create successful response
+  factory ApiResponse.success(T data) {
+    return ApiResponse._(data: data, isSuccess: true);
   }
-
-  /// Convert this ApiResponse to JSON
-  Map<String, dynamic> toJson({Object? Function(T?)? toJsonT}) {
-    return {
-      'success': success,
-      if (message != null) 'message': message,
-      if (code != null) 'code': code,
-      if (data != null) 'data': toJsonT != null ? toJsonT(data) : data,
-      if (errors != null) 'errors': errors,
-    };
+  
+  /// Create error response
+  factory ApiResponse.error(String message) {
+    return ApiResponse._(errorMessage: message, isSuccess: false);
   }
-
-  /// Create a success response
-  factory ApiResponse.success({T? data, String? message}) {
-    return ApiResponse(success: true, data: data, message: message);
-  }
-
-  /// Create an error response
-  factory ApiResponse.error({
-    String? message,
-    int? code,
-    List<String>? errors,
-  }) {
-    return ApiResponse(
-      success: false,
-      message: message,
-      code: code,
-      errors: errors,
-    );
-  }
-
-  /// Check if the response is successful
-  bool get isSuccess => success;
-
-  /// Check if the response has errors
-  bool get hasError => !success;
-
-  /// Get the first error message if available
-  String? get errorMessage => message ?? errors?.first;
-
-  /// Create a copy of this response with updated values
+  
+  /// Check if response has data
+  bool get hasData => data != null;
+  
+  /// Check if response has error
+  bool get hasError => errorMessage != null;
+  
+  /// Create copy with different values
   ApiResponse<T> copyWith({
-    bool? success,
-    String? message,
-    int? code,
     T? data,
-    List<String>? errors,
+    String? errorMessage,
+    bool? isSuccess,
   }) {
-    return ApiResponse<T>(
-      success: success ?? this.success,
-      message: message ?? this.message,
-      code: code ?? this.code,
+    return ApiResponse._(
       data: data ?? this.data,
-      errors: errors ?? this.errors,
+      errorMessage: errorMessage ?? this.errorMessage,
+      isSuccess: isSuccess ?? this.isSuccess,
     );
   }
-
+  
   @override
   String toString() {
-    return 'ApiResponse{success: $success, message: $message, code: $code, data: $data, errors: $errors}';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    if (other is! ApiResponse<T>) return false;
-    return success == other.success &&
-        message == other.message &&
-        code == other.code &&
-        data == other.data &&
-        errors.toString() == other.errors.toString();
-  }
-
-  @override
-  int get hashCode {
-    return success.hashCode ^
-        message.hashCode ^
-        code.hashCode ^
-        data.hashCode ^
-        errors.hashCode;
+    if (isSuccess) {
+      return 'ApiResponse.success(data: $data)';
+    } else {
+      return 'ApiResponse.error(message: $errorMessage)';
+    }
   }
 }

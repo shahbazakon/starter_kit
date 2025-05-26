@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:starter_kit/starter_kit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  
   // Initialize dependency injection
   await configureDependencies(environment: 'dev');
-
+  
   runApp(const MyApp());
 }
 
@@ -22,10 +21,10 @@ class MyApp extends StatelessWidget {
       darkTheme: AppTheme.darkTheme,
       navigatorKey: NavigationUtils.navigatorKey,
       home: const ExampleHomePage(),
-      localizationsDelegates: const [
+      localizationsDelegates: [
         AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
+        DefaultMaterialLocalizations.delegate,
+        DefaultWidgetsLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
     );
@@ -142,8 +141,8 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     // Validate email as user types
                     setState(() {});
                   },
-                  errorText: _emailController.text.isNotEmpty &&
-                          !StringUtils.isEmail(_emailController.text)
+                  errorText: _emailController.text.isNotEmpty && 
+                             !StringUtils.isEmail(_emailController.text)
                       ? 'Please enter a valid email address'
                       : null,
                 ),
@@ -159,12 +158,10 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                   labelText: 'Country',
                   value: _selectedCountry,
                   hintText: 'Select your country',
-                  items: _countries
-                      .map((country) => DropdownMenuItem(
-                          value: country, child: Text(country)))
-                      .toList(),
-                  onChanged: (value) =>
-                      setState(() => _selectedCountry = value),
+                  items: _countries.map((country) => 
+                    DropdownMenuItem(value: country, child: Text(country))
+                  ).toList(),
+                  onChanged: (value) => setState(() => _selectedCountry = value),
                 ),
               ],
             ),
@@ -222,8 +219,7 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                 const SizedBox(height: 12),
                 AppStatusCard.warning(
                   title: 'Storage Warning',
-                  description:
-                      'Your storage is 80% full. Consider cleaning up.',
+                  description: 'Your storage is 80% full. Consider cleaning up.',
                 ),
                 const SizedBox(height: 12),
                 AppStatusCard.error(
@@ -245,16 +241,14 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('String Utils Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('capitalize("hello world")',
-                          StringUtils.capitalize('hello world')),
-                      _buildUtilRow(
-                          'truncate("Very long text...", 10)',
-                          StringUtils.truncate(
-                              'Very long text that needs truncation', 10)),
-                      _buildUtilRow('isEmail("test@example.com")',
-                          StringUtils.isEmail('test@example.com').toString()),
-                      _buildUtilRow('toCamelCase("hello world")',
-                          StringUtils.toCamelCase('hello world')),
+                      _buildUtilRow('capitalize("hello world")', 
+                                   StringUtils.capitalize('hello world')),
+                      _buildUtilRow('truncate("Very long text...", 10)', 
+                                   StringUtils.truncate('Very long text that needs truncation', 10)),
+                      _buildUtilRow('isEmail("test@example.com")', 
+                                   StringUtils.isEmail('test@example.com').toString()),
+                      _buildUtilRow('toCamelCase("hello world")', 
+                                   StringUtils.toCamelCase('hello world')),
                     ],
                   ),
                 ),
@@ -265,18 +259,16 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('Date Utils Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('formatDate(now)',
-                          AppDateUtils.formatDate(DateTime.now())),
-                      _buildUtilRow(
-                          'formatRelativeTime(1 hour ago)',
-                          AppDateUtils.formatRelativeTime(DateTime.now()
-                              .subtract(const Duration(hours: 1)))),
-                      _buildUtilRow('isToday(now)',
-                          AppDateUtils.isToday(DateTime.now()).toString()),
-                      _buildUtilRow(
-                          'formatDuration(2h 30m)',
-                          AppDateUtils.formatDuration(
-                              const Duration(hours: 2, minutes: 30))),
+                      _buildUtilRow('formatDate(now)', 
+                                   AppDateUtils.formatDate(DateTime.now())),
+                      _buildUtilRow('formatRelativeTime(1 hour ago)', 
+                                   AppDateUtils.formatRelativeTime(
+                                     DateTime.now().subtract(const Duration(hours: 1)))),
+                      _buildUtilRow('isToday(now)', 
+                                   AppDateUtils.isToday(DateTime.now()).toString()),
+                      _buildUtilRow('formatDuration(2h 30m)', 
+                                   AppDateUtils.formatDuration(
+                                     const Duration(hours: 2, minutes: 30))),
                     ],
                   ),
                 ),
@@ -287,14 +279,14 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                     children: [
                       Text('Validators Demo', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
-                      _buildUtilRow('email("test@example.com")',
-                          Validators.email('test@example.com') ?? 'Valid ✅'),
-                      _buildUtilRow('email("invalid-email")',
-                          Validators.email('invalid-email') ?? 'Valid ✅'),
-                      _buildUtilRow('phone("+1234567890")',
-                          Validators.phone('+1234567890') ?? 'Valid ✅'),
-                      _buildUtilRow(
-                          'phone("123")', Validators.phone('123') ?? 'Valid ✅'),
+                      _buildUtilRow('email("test@example.com")', 
+                                   Validators.email('test@example.com') ?? 'Valid ✅'),
+                      _buildUtilRow('email("invalid-email")', 
+                                   Validators.email('invalid-email') ?? 'Valid ✅'),
+                      _buildUtilRow('phone("+1234567890")', 
+                                   Validators.phone('+1234567890') ?? 'Valid ✅'),
+                      _buildUtilRow('phone("123")', 
+                                   Validators.phone('123') ?? 'Valid ✅'),
                     ],
                   ),
                 ),
@@ -314,8 +306,7 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                       Text('API Configuration', style: AppTextStyles.h5),
                       const SizedBox(height: 12),
                       _buildInfoRow('Base URL', get<AppConfig>().apiBaseUrl),
-                      _buildInfoRow('Environment',
-                          get<AppConfig>().isDebug ? 'Debug' : 'Release'),
+                      _buildInfoRow('Environment', get<AppConfig>().isDebug ? 'Debug' : 'Release'),
                       _buildInfoRow('App Name', get<AppConfig>().appName),
                       _buildInfoRow('Version', get<AppConfig>().appVersion),
                       const SizedBox(height: 16),
@@ -356,8 +347,8 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
                         children: [
                           Text('Device Details', style: AppTextStyles.h5),
                           const SizedBox(height: 12),
-                          ...deviceInfo.entries.map(
-                              (entry) => _buildInfoRow(entry.key, entry.value)),
+                          ...deviceInfo.entries.map((entry) => 
+                            _buildInfoRow(entry.key, entry.value)),
                         ],
                       );
                     },
@@ -467,18 +458,18 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
 
   Future<void> _testApiCall() async {
     NavigationUtils.showLoadingDialog(message: 'Testing API...');
-
+    
     try {
       final apiClient = get<ApiClient>();
-
+      
       // Simulate API call delay
       await Future.delayed(const Duration(seconds: 2));
-
+      
       // This will fail as we don't have a real API, but it demonstrates the usage
       final response = await apiClient.get<Map<String, dynamic>>('/test');
-
+      
       NavigationUtils.hideLoadingDialog();
-
+      
       if (response.isSuccess) {
         _showSnackBar('API call successful!');
       } else {

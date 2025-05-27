@@ -1,6 +1,6 @@
 name: starter_kit
 description: "A comprehensive, scalable, and production-ready Flutter boilerplate generator with clean architecture."
-version: 1.0.1
+version: 1.0.2+1
 homepage: https://github.com/yourgithub/starter_kit
 repository: https://github.com/yourgithub/starter_kit
 
@@ -55,7 +55,7 @@ dependencies:
   recase: ^4.1.0
   yaml: ^3.1.2
   yaml_edit: ^2.2.0
-  
+
 
 dev_dependencies:
   flutter_test:

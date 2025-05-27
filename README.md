@@ -28,7 +28,6 @@ dart run starter_kit add_api UserAPI     # Add API services
 ### 🏁 Getting Started
 - [What is StarterKit?](#-what-is-starterkit)
 - [Why Choose StarterKit?](#-why-choose-starterkit)
-- [Installation](#-installation)
 - [First Steps](#-first-steps)
 
 ### 🛠️ Core Features
@@ -102,35 +101,6 @@ StarterKit eliminates the **tedious setup phase** of Flutter projects. Instead o
 - **🎨 Beautiful Design** - WeChat-inspired design system
 - **🧪 Test-Ready** - Complete testing infrastructure
 - **📈 Scalable** - Grows with your project needs
-
----
-
-## 📦 Installation
-
-### Step 1: Add Dependency
-
-Add to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  starter_kit: ^1.0.1
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-```
-
-### Step 2: Install Package
-
-```bash
-flutter pub get
-```
-
-### Step 3: Verify Installation
-
-```bash
-dart run starter_kit --help
-```
 
 ---
 
@@ -239,27 +209,27 @@ StarterKit implements **Clean Architecture** with clear separation of concerns:
 
 ```
 ┌─────────────────────────────────────────────────────────┐
-│                 🎨 PRESENTATION LAYER                   │
+│                    PRESENTATION LAYER                   │
 │                                                         │
-│  Screen Widgets → State Management → User Interactions │
+│  Screen Widgets → State Management → User Interactions  │
 └─────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────┐
-│                   🧠 DOMAIN LAYER                       │
+│                      DOMAIN LAYER                       │
 │                                                         │
-│   Business Logic → Entities → Repository Contracts     │
+│   Business Logic → Entities → Repository Contracts      │
 └─────────────────────────────────────────────────────────┘
                               ↓  
 ┌─────────────────────────────────────────────────────────┐
-│                    💾 DATA LAYER                        │
+│                       DATA LAYER                        │
 │                                                         │
-│    API Calls → Data Models → Repository Implementation │
+│    API Calls → Data Models → Repository Implementation  │
 └─────────────────────────────────────────────────────────┘
                               ↓
 ┌─────────────────────────────────────────────────────────┐
-│                    ⚙️ CORE LAYER                        │
+│                       CORE LAYER                        │
 │                                                         │
-│     Utilities → Configuration → Dependency Injection   │
+│     Utilities → Configuration → Dependency Injection    │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -276,21 +246,21 @@ StarterKit implements **Clean Architecture** with clear separation of concerns:
 
 ```
 ┌─ MAINTAINABILITY ──────────────────────────────────────┐
-│  ✅ Clear separation of concerns                      │
-│  ✅ Easy to locate and modify code                    │
-│  ✅ Reduced coupling between layers                   │
+│   •  Clear separation of concerns                      │
+│   •  Easy to locate and modify code                    │
+│   •  Reduced coupling between layers                   │
 └────────────────────────────────────────────────────────┘
 
 ┌─ TESTABILITY ──────────────────────────────────────────┐
-│  ✅ Each layer can be tested independently           │
-│  ✅ Easy mocking of dependencies                      │
-│  ✅ Clear test boundaries                             │
+│   •  Each layer can be tested independently            │
+│   •  Easy mocking of dependencies                      │
+│   •  Clear test boundaries                             │
 └────────────────────────────────────────────────────────┘
 
 ┌─ SCALABILITY ──────────────────────────────────────────┐
-│  ✅ Easy to add new features                          │
-│  ✅ Supports team collaboration                       │
-│  ✅ Framework-independent business logic              │
+│   •  Easy to add new features                          │
+│   •  Supports team collaboration                       │
+│   •  Framework-independent business logic              │
 └────────────────────────────────────────────────────────┘
 ```
 
@@ -374,7 +344,7 @@ StarterKit includes a **WeChat-inspired design system** for consistent, beautifu
 - `PrimaryButton` - Main actions (save, submit, continue)
 - `SecondaryButton` - Secondary actions (cancel, back)
 
-**📝 Input Fields**  
+**📝 Input Fields**
 - `AppTextField` - Text inputs with validation
 - `AppDropdown` - Selection dropdowns
 - `AppDatePicker` - Date/time selection
@@ -690,40 +660,5 @@ flutter test
 dart run bin/starter_kit.dart init
 ```
 
-### 📋 Guidelines
-
-- ✅ Check existing issues before creating new ones
-- ✅ Add tests for new features
-- ✅ Update documentation for changes
-- ✅ Follow existing code style
-- ✅ Ensure all tests pass
-
----
-
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
----
-
-## 🙏 Acknowledgments
-
-- **🎨 Design Inspiration**: WeChat's clean and intuitive design language
-- **🏗️ Architecture**: Clean Architecture principles by Robert C. Martin
-- **❤️ Community**: Built with love for the Flutter community
-- **🚀 ErrorXperts**: Created and maintained by the ErrorXperts team
-
----
-
-## 🎉 Ready to Build?
-
-```
-🚀 Get Started: dart run starter_kit init
-📖 Read Docs: View sections above
-💬 Get Help: Open an issue on GitHub
-⭐ Show Love: Star the repository
-```
-
 **Made with ❤️ by ErrorXperts**
 
-*If StarterKit helped you build something awesome, please consider giving it a ⭐ on [GitHub](https://github.com/your-repo/starter_kit)!*

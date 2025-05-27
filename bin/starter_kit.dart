@@ -94,7 +94,7 @@ void _showHelp() {
 }
 
 void _showVersion() {
-  stdout.writeln('StarterKit CLI v1.0.0');
+  stdout.writeln('StarterKit CLI v1.0.1');
   stdout.writeln('Flutter boilerplate generator for rapid development');
 }
 
@@ -274,7 +274,7 @@ void _generateCoreConfig() {
   final content = '''/// Application configuration
 class AppConfig {
   static const String appName = 'MyApp';
-  static const String appVersion = '1.0.0';
+  static const String appVersion = '1.0.1';
   static const String apiBaseUrl = 'https://api.example.com';
   static const bool isDebug = true;
   static const int apiTimeout = 30000;
@@ -1454,7 +1454,7 @@ class DeviceUtils {
   static Future<String> getAppVersion() async {
     try {
       // In a real app, you'd use package_info_plus
-      return '1.0.0';
+      return '1.0.1';
     } catch (e) {
       return 'Unknown';
     }

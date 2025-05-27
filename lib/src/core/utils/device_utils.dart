@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +11,7 @@ class DeviceUtils {
     if (kIsWeb) {
       return 'web-device';
     }
-    
+
     try {
       // In a real app, you'd use device_info_plus package
       if (Platform.isIOS) {
@@ -24,13 +25,13 @@ class DeviceUtils {
       return 'unknown-device';
     }
   }
-  
+
   /// Get device name
   static Future<String> getDeviceName() async {
     if (kIsWeb) {
       return 'Web Browser';
     }
-    
+
     try {
       if (Platform.isIOS) {
         return 'iPhone';
@@ -49,30 +50,30 @@ class DeviceUtils {
       return 'Unknown Device';
     }
   }
-  
+
   /// Get OS version
   static Future<String> getOsVersion() async {
     if (kIsWeb) {
       return 'Web';
     }
-    
+
     try {
       return Platform.operatingSystemVersion;
     } catch (e) {
       return 'Unknown';
     }
   }
-  
+
   /// Get app version
   static Future<String> getAppVersion() async {
     try {
       // In a real app, you'd use package_info_plus
-      return '1.0.0';
+      return '1.0.1';
     } catch (e) {
       return 'Unknown';
     }
   }
-  
+
   /// Get package name
   static Future<String> getPackageName() async {
     try {
@@ -82,13 +83,13 @@ class DeviceUtils {
       return 'Unknown';
     }
   }
-  
+
   /// Get device type
   static Future<String> getDeviceType() async {
     if (kIsWeb) {
       return 'web';
     }
-    
+
     try {
       if (Platform.isIOS || Platform.isAndroid) {
         return 'mobile';
@@ -101,36 +102,36 @@ class DeviceUtils {
       return 'unknown';
     }
   }
-  
+
   /// Check if device is mobile
   static bool isMobile() {
     if (kIsWeb) return false;
     return Platform.isIOS || Platform.isAndroid;
   }
-  
+
   /// Check if device is desktop
   static bool isDesktop() {
     if (kIsWeb) return false;
     return Platform.isMacOS || Platform.isWindows || Platform.isLinux;
   }
-  
+
   /// Check if running on web
   static bool isWeb() {
     return kIsWeb;
   }
-  
+
   /// Check if device is iOS
   static bool isIOS() {
     if (kIsWeb) return false;
     return Platform.isIOS;
   }
-  
+
   /// Check if device is Android
   static bool isAndroid() {
     if (kIsWeb) return false;
     return Platform.isAndroid;
   }
-  
+
   /// Vibrate device (if supported)
   static Future<void> vibrate() async {
     try {
@@ -139,22 +140,22 @@ class DeviceUtils {
       // Vibration not supported
     }
   }
-  
+
   /// Hide keyboard
   static void hideKeyboard(BuildContext context) {
     FocusScope.of(context).unfocus();
   }
-  
+
   /// Check if keyboard is visible
   static bool isKeyboardVisible(BuildContext context) {
     return MediaQuery.of(context).viewInsets.bottom > 0;
   }
-  
+
   /// Get screen size
   static Size getScreenSize(BuildContext context) {
     return MediaQuery.of(context).size;
   }
-  
+
   /// Check if device is tablet
   static bool isTablet(BuildContext context) {
     final size = MediaQuery.of(context).size;

@@ -2,10 +2,10 @@
 
 All notable changes to the StarterKit package will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.1/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.0.0] - 2024-01-15
+## [1.0.1] - 2024-01-15
 
 ### 🎉 Initial Release
 
@@ -156,7 +156,7 @@ Or update your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  starter_kit: ^1.0.0
+  starter_kit: ^1.0.1
 ```
 
 ## Migration Guide
